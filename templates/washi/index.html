@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  WASHI — Japanese-minimalist presentation template
+  ============================================================
+  Visual system: warm stone paper, sumi ink, one vermillion accent;
+  light-weight system sans headlines (300 with bold accents), Georgia
+  italics for quotes, ensō circle, vermillion hanko seal, vertical-rl
+  accent strips, short vermillion rules, vast whitespace, hairline
+  footers. Calm, airy, disciplined — zero gradients anywhere.
+
+  HOW TO USE:
+  1. Copy this folder to a new working folder (don't edit in place).
+  2. Set the CONFIG values in the <script> block at the bottom.
+  3. Replace the [BRACKETED] sample content with your own.
+  4. Delete slides you don't need; keep one of each component you use
+     as a reference while building.
+
+  COMPONENTS (see sample slides below):
+    Slide types : .slide (stone) · .slide.center (vertically centered text)
+    Type        : .kicker (letterspaced small caps) · h1.zen / h2.zen
+                  (light 300 with <b> accents) · .lede · .body-copy
+    Zen marks   : .enso (SVG circle, absolute top-left) · .hanko (vermillion
+                  seal) · .vtext (vertical-rl strip, right edge)
+                  .rule-red (short vermillion rule) · .foot (hairline footer)
+    Layouts     : .principles (3 cols, 一二三 numerals) · .split (2 cols +
+                  framed [IMAGE]) · .stat-band (large light numerals)
+                  .steps (4-col process with rail connectors) · ol.agenda
+                  (01–05 hairline rows)
+    Content     : blockquote.zq (Georgia italic quote) · .video-frame
+                  (offline <video> slot)
+    Chrome      : #fontctl (A−/100%/A+) · #progress · .navzone · .foot (per-slide number)
+
+  NAVIGATION: → / ← / Space / PageUp / PageDown · F = fullscreen ·
+  click screen edges · touch swipe · deep-link with #sN
+  FONT SIZE: A− / 100% / A+ scales the root font size (70%–200%); all
+  type is rem-based so everything scales together. Persisted per deck.
+-->
+<title>[Deck title] — Washi template</title>
+<style>
+  :root {
+    --stone: #f1eee7;
+    --ink: #1d1d1b;
+    --red: #c0392b;
+    --gray: #8a867c;
+    --line: #dcd7c9;
+    --sans: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --serif: Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: var(--sans); background: var(--stone); color: var(--ink); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  #deck { position: fixed; inset: 0; }
+
+  /* ---------- slides ---------- */
+  .slide { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center;
+    padding: 8vh 10vw; overflow: hidden; background: var(--stone);
+    opacity: 0; transition: opacity .6s ease; pointer-events: none; }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide.top { justify-content: flex-start; padding-top: 11vh; }
+  .content { position: relative; z-index: 2; }
+  .center { text-align: center; }
+  .center .lede, .center blockquote.zq { margin-left: auto; margin-right: auto; }
+
+  /* ---------- type ---------- */
+  .kicker { font-size: .78rem; letter-spacing: .42em; text-transform: uppercase; color: var(--gray); margin-bottom: 1.6rem; text-indent: .1em; }
+  h1.zen { font-size: clamp(2.6rem, 6.8vw, 5.6rem); font-weight: 300; line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; max-width: 16ch; }
+  h1.zen b { font-weight: 700; }
+  h2.zen { font-size: clamp(1.9rem, 4.2vw, 3.2rem); font-weight: 300; line-height: 1.2; text-wrap: balance; margin-bottom: 1.4rem; max-width: 22ch; }
+  h2.zen b { font-weight: 700; }
+  .lede { font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 2; color: var(--gray); max-width: 42ch; margin-top: 1.8rem; font-weight: 300; }
+  .body-copy { font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 2; color: #4a4843; max-width: 46ch; font-weight: 300; }
+  .body-copy + .body-copy { margin-top: 1.4rem; }
+  .small { font-size: clamp(.82rem, 1.4vw, .98rem); line-height: 1.8; color: var(--gray); font-weight: 300; }
+
+  /* ---------- zen marks ---------- */
+  .enso { position: absolute; left: 6vw; top: 9vh; width: clamp(120px, 15vw, 190px); opacity: .9; z-index: 1; }
+  .slide:first-child .hanko { margin-top: clamp(150px, 21vh, 230px); }
+  .hanko { width: 56px; height: 56px; border-radius: 8px; background: var(--red); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 1.7rem; margin-bottom: 2.2rem;
+    box-shadow: 0 8px 20px -8px rgba(192,57,43,.5); }
+  .vtext { position: absolute; right: 4.5vw; top: 50%; transform: translateY(-50%);
+    writing-mode: vertical-rl; font-size: .78rem; letter-spacing: .5em;
+    text-transform: uppercase; color: var(--gray); z-index: 1; }
+  .rule-red { width: 48px; height: 3px; background: var(--red); margin: 2rem 0; }
+  .center .rule-red { margin-left: auto; margin-right: auto; }
+  .foot { position: absolute; bottom: 6vh; left: 10vw; right: 10vw;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--line); padding-top: 1.2rem;
+    font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gray); z-index: 2; }
+
+  /* ---------- principles (3 columns) ---------- */
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 3rem; max-width: 940px; }
+  @media (max-width: 860px) { .principles { grid-template-columns: 1fr; gap: 1.6rem; } }
+  .principles .n { font-family: var(--serif); font-size: 1.1rem; color: var(--red); margin-bottom: .9rem; letter-spacing: .1em; }
+  .principles h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 600; margin-bottom: .6rem; }
+  .principles p { font-size: clamp(.92rem, 1.6vw, 1.05rem); line-height: 1.9; color: var(--gray); font-weight: 300; }
+
+  /* ---------- split (2 columns + image) ---------- */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 2.4rem; max-width: 1000px; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 2rem; } }
+  .figure { border: 1px solid var(--ink); padding: .8rem; background: var(--stone); }
+  .figure .ph { aspect-ratio: 4 / 3; background: #e7e2d4; display: flex; align-items: center; justify-content: center;
+    font-size: .78rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gray); text-indent: .28em; }
+  .figure figcaption { font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gray); margin-top: .8rem; text-align: center; }
+
+  /* ---------- stat band ---------- */
+  .stat-band { display: flex; gap: 5rem; margin-top: 3rem; flex-wrap: wrap; }
+  @media (max-width: 860px) { .stat-band { gap: 2.4rem; } }
+  .stat-band .stat + .stat { border-left: 1px solid var(--line); padding-left: 5rem; }
+  @media (max-width: 860px) { .stat-band .stat + .stat { border-left: none; padding-left: 0; } }
+  .stat-band .stat b { display: block; font-size: clamp(3rem, 6vw, 5rem); font-weight: 300; letter-spacing: -0.02em; line-height: 1; margin-bottom: .8rem; }
+  .stat-band .stat span { font-size: .78rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gray); }
+
+  /* ---------- quote ---------- */
+  blockquote.zq { max-width: 36ch; }
+  blockquote.zq p { font-family: var(--serif); font-size: clamp(1.5rem, 3.2vw, 2.5rem); font-style: italic; line-height: 1.5; text-wrap: balance; }
+  blockquote.zq .rule-red { margin: 2rem auto; }
+  blockquote.zq cite { display: block; margin-top: 1.8rem; font-style: normal; font-family: var(--sans);
+    font-size: .78rem; letter-spacing: .4em; text-transform: uppercase; color: var(--gray); text-indent: .4em; }
+
+  /* ---------- process steps ---------- */
+  .rail { position: relative; height: 1px; background: var(--line); margin: 3rem 0 2.2rem; max-width: 940px; }
+  .rail span { position: absolute; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); transform: translateX(-50%); }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.4rem; max-width: 940px; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr 1fr; } }
+  .steps .snum { font-size: .85rem; letter-spacing: .34em; color: var(--red); margin-bottom: 1rem; text-transform: uppercase; }
+  .steps h3 { font-size: clamp(1.05rem, 1.9vw, 1.3rem); font-weight: 600; margin-bottom: .6rem; }
+  .steps p { font-size: clamp(.9rem, 1.5vw, 1rem); line-height: 1.9; color: var(--gray); font-weight: 300; }
+
+  /* ---------- agenda ---------- */
+  ol.agenda { list-style: none; margin-top: 2.6rem; max-width: 700px; }
+  ol.agenda li { display: flex; align-items: baseline; gap: 2rem; padding: 1.3rem 0; border-bottom: 1px solid var(--line);
+    font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; }
+  ol.agenda li:first-child { border-top: 1px solid var(--line); }
+  ol.agenda .num { font-size: .85rem; font-weight: 400; letter-spacing: .3em; color: var(--red); min-width: 2.6rem; }
+
+  /* ---------- video ---------- */
+  .video-frame { border: 1px solid var(--ink); padding: .8rem; background: var(--stone); max-width: 760px; margin-top: 1.8rem; }
+  .video-frame video { display: block; width: 100%; aspect-ratio: 16 / 9; max-height: 34vh; background: #000; }
+  .video-note { margin-top: 1rem; }
+
+  /* ---------- chrome ---------- */
+  #progress { position: fixed; top: 0; left: 0; height: 2px; z-index: 50; background: var(--red); width: 0; }
+  #fontctl { position: fixed; top: 14px; right: 18px; z-index: 60; display: flex; align-items: center; gap: 2px;
+    background: rgba(241,238,231,.92); border: 1px solid var(--line); border-radius: 999px; padding: 4px 6px; }
+  #fontctl button { font-family: var(--sans); font-size: .95rem; font-weight: 700; width: 2rem; height: 2rem;
+    border: none; border-radius: 50%; background: transparent; color: var(--red); cursor: pointer; }
+  #fontctl button:hover { background: rgba(192,57,43,.1); }
+  #fontpct { font-family: var(--sans); font-size: .75rem; color: var(--gray); font-weight: 700; min-width: 3.2rem; text-align: center; cursor: pointer; }
+  .navzone { position: fixed; top: 0; bottom: 0; width: 8vw; z-index: 40; cursor: pointer; }
+  #prevZone { left: 0; } #nextZone { right: 0; }
+
+  @media print {
+    #fontctl, #progress, .navzone { display: none !important; }
+    .slide { position: relative; opacity: 1 !important; transform: none !important; pointer-events: auto; inset: auto; page-break-after: always; min-height: 96vh; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="fontctl"><button id="fontdn" aria-label="Decrease font size">A−</button><span id="fontpct" title="Reset to 100%">100%</span><button id="fontup" aria-label="Increase font size">A+</button></div>
+<div id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide active">
+    <svg class="enso" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <circle cx="50" cy="50" r="42" stroke="#1d1d1b" stroke-width="5" stroke-linecap="round" stroke-dasharray="248 268" transform="rotate(-70 50 50)" opacity=".85"/>
+    </svg>
+    <div class="vtext">[Edition — MMXXVI]</div>
+    <div class="content">
+      <div class="hanko">和</div>
+      <p class="kicker">[Kicker — the quiet collection]</p>
+      <h1 class="zen">[Less, but] <b>[better.]</b></h1>
+      <p class="lede">[One or two calm sentences that frame the talk — the promise, stated plainly.]</p>
+    </div>
+    <div class="foot"><span>[Cover]</span><span>01 / 10</span></div>
+  </section>
+
+  <!-- 2 · STATEMENT -->
+  <section class="slide">
+    <div class="vtext">[The single idea]</div>
+    <div class="content center">
+      <div class="rule-red"></div>
+      <h2 class="zen" style="max-width:30ch;margin-left:auto;margin-right:auto">[One clear sentence, set large and given room to breathe.] <b>[This is the line they will remember.]</b></h2>
+      <div class="rule-red"></div>
+    </div>
+    <div class="foot"><span>[Statement]</span><span>02 / 10</span></div>
+  </section>
+
+  <!-- 3 · THREE PRINCIPLES -->
+  <section class="slide top">
+    <div class="vtext">[Ma — the beauty of empty space]</div>
+    <div class="content">
+      <p class="kicker">[Principles]</p>
+      <h2 class="zen">[Three ideas,] <b>[held lightly.]</b></h2>
+      <div class="rule-red"></div>
+      <div class="principles">
+        <div>
+          <div class="n">一</div>
+          <h3>[First principle]</h3>
+          <p>[A quiet sentence or two. Emptiness is not absence — it gives everything else meaning.]</p>
+        </div>
+        <div>
+          <div class="n">二</div>
+          <h3>[Second principle]</h3>
+          <p>[A quiet sentence or two. Remove until nothing can be taken away.]</p>
+        </div>
+        <div>
+          <div class="n">三</div>
+          <h3>[Third principle]</h3>
+          <p>[A quiet sentence or two. No ornament, no noise — what remains feels inevitable.]</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>[Principles]</span><span>03 / 10</span></div>
+  </section>
+
+  <!-- 4 · SPLIT + IMAGE -->
+  <section class="slide top">
+    <div class="vtext">[Look closely]</div>
+    <div class="content">
+      <p class="kicker">[In focus]</p>
+      <h2 class="zen">[The subject,] <b>[up close.]</b></h2>
+      <div class="split">
+        <div>
+          <p class="body-copy">[A short paragraph introducing the image. Two or three sentences are plenty — the page does the rest of the talking.]</p>
+          <p class="body-copy">[A second thought, if the first needs company.]</p>
+        </div>
+        <figure class="figure">
+          <div class="ph">[ Image ]</div>
+          <figcaption>[Fig. 01 — caption]</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="foot"><span>[In focus]</span><span>04 / 10</span></div>
+  </section>
+
+  <!-- 5 · STAT BAND -->
+  <section class="slide">
+    <div class="vtext">[By the numbers]</div>
+    <div class="content">
+      <p class="kicker">[Evidence]</p>
+      <h2 class="zen">[The numbers,] <b>[quietly stated.]</b></h2>
+      <div class="stat-band">
+        <div class="stat"><b>[128]</b><span>[What was counted]</span></div>
+        <div class="stat"><b>[94%]</b><span>[What held true]</span></div>
+        <div class="stat"><b>[3×]</b><span>[What multiplied]</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>[Evidence]</span><span>05 / 10</span></div>
+  </section>
+
+  <!-- 6 · QUOTE -->
+  <section class="slide">
+    <div class="vtext">[Voices]</div>
+    <div class="content center">
+      <blockquote class="zq">
+        <div class="rule-red"></div>
+        <p>"[The quote — short enough to read at a glance, strong enough to remember.]"</p>
+        <cite>— [Name], [source]</cite>
+      </blockquote>
+    </div>
+    <div class="foot"><span>[Voices]</span><span>06 / 10</span></div>
+  </section>
+
+  <!-- 7 · PROCESS -->
+  <section class="slide top">
+    <div class="vtext">[Step by step]</div>
+    <div class="content">
+      <p class="kicker">[Process]</p>
+      <h2 class="zen">[Four steps,] <b>[no rushing.]</b></h2>
+      <div class="rail" aria-hidden="true">
+        <span style="left:12.5%"></span><span style="left:37.5%"></span><span style="left:62.5%"></span><span style="left:87.5%"></span>
+      </div>
+      <div class="steps">
+        <div>
+          <div class="snum">01</div>
+          <h3>[First step]</h3>
+          <p>[What happens here, in one calm sentence.]</p>
+        </div>
+        <div>
+          <div class="snum">02</div>
+          <h3>[Second step]</h3>
+          <p>[What happens here, in one calm sentence.]</p>
+        </div>
+        <div>
+          <div class="snum">03</div>
+          <h3>[Third step]</h3>
+          <p>[What happens here, in one calm sentence.]</p>
+        </div>
+        <div>
+          <div class="snum">04</div>
+          <h3>[Fourth step]</h3>
+          <p>[What happens here, in one calm sentence.]</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>[Process]</span><span>07 / 10</span></div>
+  </section>
+
+  <!-- 8 · AGENDA -->
+  <section class="slide top">
+    <div class="vtext">[The order of things]</div>
+    <div class="content">
+      <p class="kicker">[Agenda]</p>
+      <h2 class="zen">[What we will] <b>[cover.]</b></h2>
+      <ol class="agenda">
+        <li><span class="num">01</span>[First topic]</li>
+        <li><span class="num">02</span>[Second topic]</li>
+        <li><span class="num">03</span>[Third topic]</li>
+        <li><span class="num">04</span>[Fourth topic]</li>
+        <li><span class="num">05</span>[Fifth topic]</li>
+      </ol>
+    </div>
+    <div class="foot"><span>[Agenda]</span><span>08 / 10</span></div>
+  </section>
+
+  <!-- 9 · VIDEO -->
+  <section class="slide top">
+    <div class="vtext">[Watch]</div>
+    <div class="content">
+      <p class="kicker">[Film]</p>
+      <h2 class="zen">[Watch it] <b>[unfold.]</b></h2>
+      <p class="lede" style="margin-top:1rem">[Two quiet sentences setting up the film — what to watch for.]</p>
+      <div class="video-frame">
+        <video controls preload="metadata" poster="[POSTER-IMAGE]">
+          <source src="[VIDEO-FILENAME].mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <p class="small video-note">[Place the .mp4 file next to this HTML file for offline playback.]</p>
+    </div>
+    <div class="foot"><span>[Film]</span><span>09 / 10</span></div>
+  </section>
+
+  <!-- 10 · CLOSING -->
+  <section class="slide">
+    <div class="vtext">[Until next time]</div>
+    <div class="content">
+      <div class="hanko">静</div>
+      <p class="kicker">[Closing]</p>
+      <h1 class="zen">[Thank you.] <b>[Begin.]</b></h1>
+      <p class="lede">[Your name] · [your-site.com] · [hello@your-site.com]</p>
+    </div>
+    <div class="foot"><span>[Closing]</span><span>10 / 10</span></div>
+  </section>
+
+</div>
+<div class="navzone" id="prevZone"></div><div class="navzone" id="nextZone"></div>
+<script>
+/* ================= CONFIG ================= */
+const CONFIG = {
+  fontStorageKey: 'washi-font-scale',   // unique per deck: persists A−/100%/A+ choice
+  minScale: 0.7,
+  maxScale: 2.0
+};
+/* =============== /CONFIG ================= */
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progress = document.getElementById('progress');
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    slides[i].scrollTop = 0;
+    if (location.hash !== '#s' + (i + 1)) history.replaceState(null, '', '#s' + (i + 1));
+  }
+  // Font-size control (rem-based: everything scales together)
+  let fsScale = 1;
+  try {
+    const saved = parseFloat(localStorage.getItem(CONFIG.fontStorageKey));
+    if (saved >= CONFIG.minScale && saved <= CONFIG.maxScale) fsScale = saved;
+  } catch (e) {}
+  const fontPct = document.getElementById('fontpct');
+  function apply() {
+    fsScale = Math.min(CONFIG.maxScale, Math.max(CONFIG.minScale, Math.round(fsScale * 10) / 10));
+    document.documentElement.style.fontSize = (fsScale * 100) + '%';
+    fontPct.textContent = Math.round(fsScale * 100) + '%';
+    try { localStorage.setItem(CONFIG.fontStorageKey, fsScale); } catch (e) {}
+  }
+  document.getElementById('fontup').addEventListener('click', (e) => { e.stopPropagation(); fsScale += .1; apply(); });
+  document.getElementById('fontdn').addEventListener('click', (e) => { e.stopPropagation(); fsScale -= .1; apply(); });
+  fontPct.addEventListener('click', (e) => { e.stopPropagation(); fsScale = 1; apply(); });
+  // Navigation
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === '+' || e.key === '=') { fsScale += .1; apply(); }
+    else if (e.key === '-' || e.key === '_') { fsScale -= .1; apply(); }
+    else if (e.key === '0') { fsScale = 1; apply(); }
+    else if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); }
+  });
+  document.getElementById('nextZone').addEventListener('click', () => show(i + 1));
+  document.getElementById('prevZone').addEventListener('click', () => show(i - 1));
+  // Touch swipe
+  let tx = null;
+  document.addEventListener('touchstart', (e) => { tx = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 60) show(i + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+  apply();
+  const m = location.hash.match(/#s(\d+)/); show(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+</body>
+</html>

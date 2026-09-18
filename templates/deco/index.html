@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  DECO — Gilded art-deco presentation template
+  ============================================================
+  Visual system: deep emerald (#0e2a20 / #0a1f17), solid gold
+  (#c9a227 / #e3c766), warm cream (#f4eedd) — zero gradients
+  anywhere. Georgia serif headlines, letterspaced small-caps gold
+  labels, a double gold frame on every slide, a hard-stop sunburst
+  ray texture (solid rays, low opacity — no color transitions),
+  chevron ◆ dividers and roman numerals. Dark emerald and light
+  cream slides alternate.
+
+  HOW TO USE:
+  1. Copy this folder to a new working folder (don't edit in place).
+  2. Set the CONFIG values in the <script> block at the bottom.
+  3. Replace the [BRACKETED] sample content with your own.
+  4. Delete slides you don't need; keep one of each component you use
+     as a reference while building.
+
+  COMPONENTS (see sample slides below):
+    Slide types : .slide.dark (emerald) · .slide.light (cream)
+    Frame       : .frame (double gold frame) · .rays (sunburst texture)
+    Type        : .deco-label (gold small-caps kicker) · h1.deco / h2.deco
+                  (serif, italic gold em accent) · .lede
+    Ornament    : .chevrons (◆ ◆ ◆ with rules) · .rn (roman numeral)
+    Layouts     : .tri (3 columns, gold hairlines) · .split (2-column) +
+                  figure.frame-img (gold-bordered image placeholder)
+                  .stat-band (3 gold numerals) · .steps (4-step process)
+                  ol.agenda-deco (roman-numeral rows, gold separators)
+    Content     : blockquote.dq (centered serif quote) · .video-wrap
+                  (offline <video> slot, gold hairline border)
+    Chrome      : #fontctl (A−/100%/A+) · #progress · #counter · .navzone
+
+  NAVIGATION: → / ← / Space / PageUp / PageDown · F = fullscreen ·
+  click screen edges · touch swipe · deep-link with #sN
+  FONT SIZE: A− / 100% / A+ scales the root font size (70%–200%); all
+  type is rem-based so everything scales together. Persisted per deck.
+-->
+<title>[Deck title] — Deco template</title>
+<style>
+  :root {
+    --emerald: #0e2a20;
+    --emerald-deep: #0a1f17;
+    --gold: #c9a227;
+    --gold-soft: #e3c766;
+    --gold-dark: #8a6d1c;
+    --cream: #f4eedd;
+    --cream-dim: #cfc6a8;
+    --ink: #14231c;
+    --ink-soft: #4c554e;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: var(--serif); background: var(--emerald-deep); color: var(--cream); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  #deck { position: fixed; inset: 0; }
+
+  /* ---------- slides ---------- */
+  .slide { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 8vh 10vw; overflow: hidden; opacity: 0; transform: scale(.985); transition: opacity .5s ease, transform .5s ease; pointer-events: none; }
+  .slide.active { opacity: 1; transform: none; pointer-events: auto; }
+  .slide.dark { background: var(--emerald-deep); color: var(--cream); }
+  .slide.light { background: var(--cream); color: var(--ink); }
+  .slide.top { justify-content: flex-start; padding-top: 10vh; }
+  .content { position: relative; z-index: 2; }
+  .center { text-align: center; }
+
+  /* ---------- double gold frame ---------- */
+  .frame { position: absolute; inset: 26px; border: 1px solid var(--gold); pointer-events: none; z-index: 1; }
+  .frame::after { content: ""; position: absolute; inset: 7px; border: 1px solid var(--gold); opacity: .55; }
+
+  /* ---------- sunburst texture: hard-stop rays, solid color, no transitions ---------- */
+  .rays { position: absolute; width: 150vmax; height: 150vmax; left: 50%; top: 50%; transform: translate(-50%, -50%); opacity: .1; pointer-events: none; z-index: 0;
+    background: repeating-conic-gradient(var(--gold) 0deg 4deg, transparent 4deg 9deg); border-radius: 50%; }
+
+  /* ---------- type ---------- */
+  .deco-label { font-family: var(--sans); font-size: .78rem; font-weight: 600; letter-spacing: .42em; text-transform: uppercase; text-indent: .42em; color: var(--gold-soft); margin-bottom: 1.8rem; }
+  .slide.light .deco-label { color: var(--gold-dark); }
+  h1.deco { font-size: clamp(2.8rem, 7.4vw, 6rem); font-weight: 400; line-height: 1.04; letter-spacing: .01em; text-wrap: balance; margin-bottom: 1rem; }
+  h1.deco em { font-style: italic; color: var(--gold-soft); }
+  .slide.light h1.deco em { color: var(--gold-dark); }
+  h2.deco { font-size: clamp(2rem, 4.6vw, 3.6rem); font-weight: 400; line-height: 1.1; text-wrap: balance; margin-bottom: 1.2rem; }
+  h2.deco em { font-style: italic; color: var(--gold-soft); }
+  .slide.light h2.deco em { color: var(--gold-dark); }
+  .lede { font-family: var(--sans); font-size: clamp(1rem, 1.9vw, 1.28rem); line-height: 1.75; max-width: 44ch; text-wrap: pretty; }
+  .center .lede { margin-left: auto; margin-right: auto; }
+  .slide.dark .lede { color: var(--cream-dim); }
+  .slide.light .lede { color: var(--ink-soft); }
+  .body { font-family: var(--sans); font-size: clamp(1rem, 1.9vw, 1.25rem); line-height: 1.8; max-width: 46ch; text-wrap: pretty; }
+  .slide.dark .body { color: var(--cream-dim); }
+  .slide.light .body { color: var(--ink-soft); }
+  .body + .body { margin-top: 1.2rem; }
+
+  /* ---------- ornament ---------- */
+  .chevrons { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 2rem 0; color: var(--gold); }
+  .chevrons::before, .chevrons::after { content: ""; height: 1px; width: 120px; background: var(--gold); opacity: .7; }
+  .chevrons span { font-size: .9rem; letter-spacing: .5em; text-indent: .5em; }
+  .slide.light .chevrons { color: var(--gold-dark); }
+  .slide.light .chevrons::before, .slide.light .chevrons::after { background: var(--gold-dark); }
+  .rn { font-size: 1.6rem; letter-spacing: .1em; color: var(--gold); }
+  .slide.light .rn { color: var(--gold-dark); }
+
+  /* ---------- three columns ---------- */
+  .tri { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 2.6rem; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); }
+  @media (max-width: 860px) { .tri { grid-template-columns: 1fr; } }
+  .tri > div { padding: 1.8rem 1.6rem; }
+  .tri > div + div { border-left: 1px solid var(--gold); }
+  @media (max-width: 860px) { .tri > div + div { border-left: none; border-top: 1px solid var(--gold); } }
+  .tri .rn { margin-bottom: .8rem; }
+  .tri h3 { font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 400; letter-spacing: .04em; margin-bottom: .6rem; }
+  .tri p { font-family: var(--sans); font-size: clamp(.92rem, 1.6vw, 1.05rem); line-height: 1.65; }
+  .slide.dark .tri p { color: var(--cream-dim); }
+  .slide.light .tri p { color: var(--ink-soft); }
+
+  /* ---------- split + framed image ---------- */
+  .split { display: grid; grid-template-columns: 1.05fr .95fr; gap: 4rem; align-items: center; margin-top: 2rem; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 2rem; } }
+  figure.frame-img { border: 1px solid var(--gold); padding: .8rem; position: relative; }
+  figure.frame-img::after { content: ""; position: absolute; inset: 4px; border: 1px solid var(--gold); opacity: .5; pointer-events: none; }
+  figure.frame-img .ph { aspect-ratio: 4 / 3; background: var(--emerald); display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-size: .8rem; letter-spacing: .28em; text-transform: uppercase; color: var(--cream-dim); }
+  .slide.light figure.frame-img .ph { background: var(--cream-dim); color: var(--ink-soft); }
+  figure.frame-img figcaption { font-family: var(--sans); font-size: .72rem; letter-spacing: .26em; text-transform: uppercase; margin-top: .8rem; text-align: center; }
+  .slide.dark figure.frame-img figcaption { color: var(--cream-dim); }
+  .slide.light figure.frame-img figcaption { color: var(--ink-soft); }
+
+  /* ---------- stat band ---------- */
+  .stat-band { display: flex; justify-content: center; gap: 4rem; margin-top: 2.8rem; flex-wrap: wrap; }
+  .stat-band .stat { text-align: center; min-width: 10rem; }
+  .stat-band .stat b { display: block; font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 400; color: var(--gold-soft); letter-spacing: .02em; line-height: 1.1; }
+  .stat-band .stat span { display: block; margin-top: .8rem; font-family: var(--sans); font-size: .76rem; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; text-indent: .32em; color: var(--cream-dim); }
+  .stat-band .stat + .stat { border-left: 1px solid var(--gold); padding-left: 4rem; }
+  @media (max-width: 860px) { .stat-band .stat + .stat { border-left: none; padding-left: 0; } }
+
+  /* ---------- quote ---------- */
+  blockquote.dq { text-align: center; max-width: 40ch; margin: 0 auto; }
+  blockquote.dq p { font-size: clamp(1.6rem, 3.4vw, 2.7rem); font-style: italic; line-height: 1.35; text-wrap: balance; }
+  blockquote.dq cite { display: block; margin-top: 1.8rem; font-style: normal; font-family: var(--sans); font-size: .78rem; letter-spacing: .4em; text-transform: uppercase; text-indent: .4em; color: var(--gold-soft); }
+  .slide.light blockquote.dq cite { color: var(--gold-dark); }
+
+  /* ---------- process steps ---------- */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 2.8rem; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr 1fr; } }
+  .steps .step { padding: 0 1.6rem; position: relative; }
+  .steps .step + .step::before { content: ""; position: absolute; left: 0; top: 1.1rem; bottom: 1.1rem; width: 1px; background: var(--gold); opacity: .6; }
+  .steps .rn { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 1rem; }
+  .steps h3 { font-size: clamp(1.05rem, 1.9vw, 1.35rem); font-weight: 400; letter-spacing: .05em; margin-bottom: .6rem; }
+  .steps p { font-family: var(--sans); font-size: clamp(.88rem, 1.5vw, 1rem); line-height: 1.65; color: var(--ink-soft); }
+
+  /* ---------- agenda ---------- */
+  ol.agenda-deco { list-style: none; margin-top: 2.2rem; max-width: 720px; }
+  ol.agenda-deco li { display: flex; align-items: baseline; gap: 1.6rem; padding: 1.15rem 0; border-bottom: 1px solid var(--gold); }
+  ol.agenda-deco li:last-child { border-bottom: none; }
+  ol.agenda-deco .rn { font-size: clamp(1.1rem, 2vw, 1.4rem); min-width: 3rem; }
+  ol.agenda-deco .item { font-size: clamp(1.15rem, 2.2vw, 1.6rem); font-weight: 400; letter-spacing: .02em; }
+  ol.agenda-deco .detail { margin-left: auto; font-family: var(--sans); font-size: clamp(.85rem, 1.5vw, 1rem); color: var(--ink-soft); letter-spacing: .1em; text-transform: uppercase; }
+
+  /* ---------- video ---------- */
+  .video-wrap { border: 1px solid var(--gold); padding: .8rem; background: #000; max-width: 860px; margin: 2rem auto 0; position: relative; }
+  .video-wrap::after { content: ""; position: absolute; inset: 4px; border: 1px solid var(--gold); opacity: .5; pointer-events: none; }
+  .video-wrap video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+  .video-note { margin-top: 1.2rem; text-align: center; font-family: var(--sans); font-size: .85rem; letter-spacing: .18em; text-transform: uppercase; color: var(--cream-dim); }
+
+  /* ---------- closing contact ---------- */
+  .contact { margin-top: 2.4rem; font-family: var(--sans); font-size: clamp(.95rem, 1.8vw, 1.2rem); letter-spacing: .24em; text-transform: uppercase; color: var(--gold-soft); }
+
+  /* ---------- chrome ---------- */
+  #progress { position: fixed; top: 0; left: 0; height: 2px; z-index: 50; background: var(--gold); width: 0; }
+  #counter { position: fixed; bottom: 34px; right: 40px; font-family: var(--sans); font-size: .72rem; letter-spacing: .34em; color: var(--gold-soft); z-index: 50; }
+  body.on-light #counter { color: var(--gold-dark); }
+  #fontctl { position: fixed; top: 34px; right: 40px; z-index: 60; display: flex; align-items: center; gap: 2px; background: rgba(10,31,23,.85); border: 1px solid var(--gold); border-radius: 999px; padding: 4px 6px; }
+  #fontctl button { font-family: var(--sans); font-size: .95rem; font-weight: 700; width: 2rem; height: 2rem; border: none; border-radius: 50%; background: transparent; color: var(--gold-soft); cursor: pointer; }
+  #fontctl button:hover { background: rgba(201,162,39,.18); }
+  #fontpct { font-family: var(--sans); font-size: .75rem; color: var(--cream-dim); font-weight: 700; min-width: 3.2rem; text-align: center; cursor: pointer; }
+  body.on-light #fontctl { background: rgba(244,238,221,.92); border-color: var(--gold); box-shadow: 0 6px 18px rgba(20,35,28,.12); }
+  body.on-light #fontctl button { color: var(--gold-dark); }
+  body.on-light #fontctl button:hover { background: rgba(201,162,39,.16); }
+  body.on-light #fontpct { color: var(--ink-soft); }
+  .navzone { position: fixed; top: 0; bottom: 0; width: 8vw; z-index: 40; cursor: pointer; }
+  #prevZone { left: 0; } #nextZone { right: 0; }
+
+  @media print {
+    #fontctl, #progress, #counter, .navzone { display: none !important; }
+    .slide { position: relative; opacity: 1 !important; transform: none !important; pointer-events: auto; inset: auto; page-break-after: always; min-height: 96vh; }
+    .rays { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="fontctl"><button id="fontdn" aria-label="Decrease font size">A−</button><span id="fontpct" title="Reset to 100%">100%</span><button id="fontup" aria-label="Increase font size">A+</button></div>
+<div id="deck">
+
+  <!-- 1 · COVER (dark) -->
+  <section class="slide dark active">
+    <div class="frame"></div><div class="rays"></div>
+    <div class="content center">
+      <p class="deco-label">[Event or series name]</p>
+      <h1 class="deco">[Your headline]<br><em>[in gold leaf.]</em></h1>
+      <div class="chevrons"><span>◆ ◆ ◆</span></div>
+      <p class="lede">[One or two sentences that set the occasion — the promise of the evening, in plain words.]</p>
+    </div>
+  </section>
+
+  <!-- 2 · STATEMENT (dark) -->
+  <section class="slide dark">
+    <div class="frame"></div>
+    <div class="content center">
+      <div class="chevrons"><span>◆ ◆ ◆</span></div>
+      <h2 class="deco" style="font-size:clamp(1.8rem,4vw,3.2rem)">[The one idea this evening is about, stated as plainly and as beautifully as you can manage.]</h2>
+      <div class="chevrons"><span>◆ ◆ ◆</span></div>
+    </div>
+  </section>
+
+  <!-- 3 · THREE ACTS (light) -->
+  <section class="slide light">
+    <div class="frame"></div>
+    <div class="content center">
+      <p class="deco-label">[The program]</p>
+      <h2 class="deco">[An evening in <em>three acts.</em>]</h2>
+      <div class="tri" style="text-align:left">
+        <div><div class="rn">I.</div><h3>[The Arrival]</h3><p>[First act in a sentence or two — what happens, and why it matters.]</p></div>
+        <div><div class="rn">II.</div><h3>[The Address]</h3><p>[Second act in a sentence or two — what happens, and why it matters.]</p></div>
+        <div><div class="rn">III.</div><h3>[The Toast]</h3><p>[Third act in a sentence or two — what happens, and why it matters.]</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · SPLIT (light) -->
+  <section class="slide light top">
+    <div class="frame"></div>
+    <div class="content">
+      <p class="deco-label">[Chapter]</p>
+      <h2 class="deco">[A heading that <em>frames the image.</em>]</h2>
+      <div class="split">
+        <div>
+          <p class="body">[A paragraph of context on the left — two or three sentences that give the image its meaning.]</p>
+          <p class="body">[A second paragraph if the story needs it. Keep both short; the page does the rest of the talking.]</p>
+        </div>
+        <figure class="frame-img">
+          <div class="ph">[ Image ]</div>
+          <figcaption>[Fig. 01 — Caption]</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · STAT BAND (dark) -->
+  <section class="slide dark">
+    <div class="frame"></div><div class="rays"></div>
+    <div class="content center">
+      <p class="deco-label">[By the numbers]</p>
+      <h2 class="deco">[The figures <em>speak.</em>]</h2>
+      <div class="stat-band">
+        <div class="stat"><b>[128]</b><span>[First metric]</span></div>
+        <div class="stat"><b>[97%]</b><span>[Second metric]</span></div>
+        <div class="stat"><b>[12×]</b><span>[Third metric]</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · QUOTE (dark) -->
+  <section class="slide dark">
+    <div class="frame"></div>
+    <div class="content">
+      <p class="deco-label" style="text-align:center">[Voices]</p>
+      <blockquote class="dq">
+        <p>"[The quote — short enough to read at a glance, strong enough to remember.]"</p>
+        <cite>— [Name], [role or source]</cite>
+      </blockquote>
+      <div class="chevrons"><span>◆ ◆ ◆</span></div>
+    </div>
+  </section>
+
+  <!-- 7 · PROCESS (light) -->
+  <section class="slide light top">
+    <div class="frame"></div>
+    <div class="content">
+      <p class="deco-label">[How it works]</p>
+      <h2 class="deco">[Four steps, <em>in order.</em>]</h2>
+      <div class="steps">
+        <div class="step"><div class="rn">I.</div><h3>[First step]</h3><p>[What happens in this step, in one sentence.]</p></div>
+        <div class="step"><div class="rn">II.</div><h3>[Second step]</h3><p>[What happens in this step, in one sentence.]</p></div>
+        <div class="step"><div class="rn">III.</div><h3>[Third step]</h3><p>[What happens in this step, in one sentence.]</p></div>
+        <div class="step"><div class="rn">IV.</div><h3>[Fourth step]</h3><p>[What happens in this step, in one sentence.]</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · AGENDA (light) -->
+  <section class="slide light top">
+    <div class="frame"></div>
+    <div class="content">
+      <p class="deco-label">[Running order]</p>
+      <h2 class="deco">[The agenda.]</h2>
+      <ol class="agenda-deco">
+        <li><span class="rn">I.</span><span class="item">[First item]</span><span class="detail">[Time]</span></li>
+        <li><span class="rn">II.</span><span class="item">[Second item]</span><span class="detail">[Time]</span></li>
+        <li><span class="rn">III.</span><span class="item">[Third item]</span><span class="detail">[Time]</span></li>
+        <li><span class="rn">IV.</span><span class="item">[Fourth item]</span><span class="detail">[Time]</span></li>
+        <li><span class="rn">V.</span><span class="item">[Fifth item]</span><span class="detail">[Time]</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 9 · VIDEO (dark) -->
+  <section class="slide dark">
+    <div class="frame"></div>
+    <div class="content center">
+      <p class="deco-label">[Screening]</p>
+      <h2 class="deco">[Watch <em>the film.</em>]</h2>
+      <div class="video-wrap">
+        <video controls preload="metadata">
+          <source src="[VIDEO-FILENAME].mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <p class="video-note">[Place the .mp4 next to this file for offline playback]</p>
+    </div>
+  </section>
+
+  <!-- 10 · CLOSING (dark) -->
+  <section class="slide dark">
+    <div class="frame"></div><div class="rays"></div>
+    <div class="content center">
+      <p class="deco-label">[Finale]</p>
+      <h1 class="deco">[Your closing line]<br><em>[in gold.]</em></h1>
+      <div class="chevrons"><span>◆ ◆ ◆</span></div>
+      <p class="contact">[your-name.com] · [hello@your-name.com]</p>
+    </div>
+  </section>
+
+</div>
+<div class="navzone" id="prevZone"></div><div class="navzone" id="nextZone"></div>
+<div id="counter"></div>
+<script>
+/* ================= CONFIG ================= */
+const CONFIG = {
+  fontStorageKey: 'deco-font-scale',   // unique per deck: persists A−/100%/A+ choice
+  minScale: 0.7,
+  maxScale: 2.0
+};
+/* =============== /CONFIG ================= */
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progress = document.getElementById('progress'), counter = document.getElementById('counter');
+  const numerals = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    document.body.classList.toggle('on-light', slides[i].classList.contains('light'));
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    counter.textContent = numerals[i] + ' / X';
+    slides[i].scrollTop = 0;
+    if (location.hash !== '#s' + (i + 1)) history.replaceState(null, '', '#s' + (i + 1));
+  }
+  // Font-size control (rem-based: everything scales together)
+  let fsScale = 1;
+  try {
+    const saved = parseFloat(localStorage.getItem(CONFIG.fontStorageKey));
+    if (saved >= CONFIG.minScale && saved <= CONFIG.maxScale) fsScale = saved;
+  } catch (e) {}
+  const fontPct = document.getElementById('fontpct');
+  function apply() {
+    fsScale = Math.min(CONFIG.maxScale, Math.max(CONFIG.minScale, Math.round(fsScale * 10) / 10));
+    document.documentElement.style.fontSize = (fsScale * 100) + '%';
+    fontPct.textContent = Math.round(fsScale * 100) + '%';
+    try { localStorage.setItem(CONFIG.fontStorageKey, fsScale); } catch (e) {}
+  }
+  document.getElementById('fontup').addEventListener('click', (e) => { e.stopPropagation(); fsScale += .1; apply(); });
+  document.getElementById('fontdn').addEventListener('click', (e) => { e.stopPropagation(); fsScale -= .1; apply(); });
+  fontPct.addEventListener('click', (e) => { e.stopPropagation(); fsScale = 1; apply(); });
+  // Navigation
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === '+' || e.key === '=') { fsScale += .1; apply(); }
+    else if (e.key === '-' || e.key === '_') { fsScale -= .1; apply(); }
+    else if (e.key === '0') { fsScale = 1; apply(); }
+    else if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); }
+  });
+  document.getElementById('nextZone').addEventListener('click', () => show(i + 1));
+  document.getElementById('prevZone').addEventListener('click', () => show(i - 1));
+  // Touch swipe
+  let tx = null;
+  document.addEventListener('touchstart', (e) => { tx = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 60) show(i + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+  apply();
+  const m = location.hash.match(/#s(\d+)/); show(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+</body>
+</html>

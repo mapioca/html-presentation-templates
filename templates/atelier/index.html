@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  ATELIER — Fashion-editorial presentation template
+  ============================================================
+  Visual system: ivory paper (#f6f3ec), ink (#141412), rouge (#9d2235),
+  hairline rules (#d9d3c1). Didone serif stack, small-caps letterspaced
+  kickers, a masthead bar on every slide (name · N° · section), and a
+  colophon footer line. Zero gradients anywhere — solid colors only.
+
+  HOW TO USE:
+  1. Copy this folder to a new working folder (don't edit in place).
+  2. Set the CONFIG values in the <script> block at the bottom.
+  3. Replace the [BRACKETED] sample content with your own.
+  4. Delete slides you don't need; keep one of each component you use
+     as a reference while building.
+
+  COMPONENTS (see sample slides below):
+    Slide types : .slide (all ivory; .center for centered)
+    Chrome      : .masthead (name · N° · section) · .colophon (footer line)
+    Type        : .kicker (rouge small-caps) · h1.display · h2.display
+                  .lede · .body-copy (+ .dropcap) · blockquote.ed
+    Layouts     : .pillars3 (roman-numeral columns) · .cols (editorial split)
+                  .stat-band (large serif numerals) · ol.steps (process)
+                  ol.agenda (numbered rows) · .video-wrap (offline video slot)
+                  .figure (+ figcaption) · .rule-red (rouge hairline)
+    Chrome UI   : #fontctl (A−/100%/A+) · #progress · #counter · .navzone
+
+  NAVIGATION: → / ← / Space / PageUp / PageDown · F = fullscreen ·
+  click screen edges · touch swipe · deep-link with #sN
+  FONT SIZE: A− / 100% / A+ scales the root font size (70%–200%); all
+  type is rem-based so everything scales together. Persisted per deck.
+  NO TIMELINE: this is a general template — no lesson-timeline footer.
+-->
+<title>[Deck title] — Atelier template</title>
+<style>
+  :root {
+    --paper: #f6f3ec;
+    --ink: #141412;
+    --rouge: #9d2235;
+    --gray: #6f6a5e;
+    --line: #d9d3c1;
+    --serif: Didot, "Bodoni MT", "Cochin", Georgia, serif;
+    --sans: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--serif); background: var(--paper); color: var(--ink);
+    overflow: hidden; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  #deck { position: fixed; inset: 0; }
+
+  /* ---------- slides ---------- */
+  .slide {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center;
+    padding: 7vh 9vw; overflow: hidden; background: var(--paper);
+    opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s ease; pointer-events: none;
+  }
+  .slide.active { opacity: 1; transform: none; pointer-events: auto; }
+  .slide.top { justify-content: flex-start; padding-top: 8vh; }
+  .center { text-align: center; }
+  .center .lede { margin-left: auto; margin-right: auto; }
+
+  /* ---------- masthead + colophon (every slide) ---------- */
+  .masthead {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px solid var(--ink); padding-bottom: .9rem; margin-bottom: 3rem;
+  }
+  .masthead span {
+    font-family: var(--sans); font-size: .78rem; font-weight: 600;
+    letter-spacing: .32em; text-transform: uppercase;
+  }
+  .masthead .no { color: var(--rouge); }
+  .colophon {
+    margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between;
+    font-family: var(--sans); font-size: .72rem; letter-spacing: .24em;
+    text-transform: uppercase; color: var(--gray);
+  }
+
+  /* ---------- type ---------- */
+  .kicker {
+    font-family: var(--sans); font-size: .78rem; font-weight: 600;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--rouge);
+    margin-bottom: 1.4rem;
+  }
+  h1.display {
+    font-size: clamp(3rem, 8vw, 6.4rem); font-weight: 400;
+    line-height: 1.02; letter-spacing: -0.01em; text-wrap: balance;
+  }
+  h1.display em { font-style: italic; color: var(--rouge); }
+  h2.display {
+    font-size: clamp(2rem, 4.6vw, 3.6rem); font-weight: 400;
+    line-height: 1.08; text-wrap: balance; margin-bottom: 1.4rem;
+  }
+  h2.display em { font-style: italic; }
+  .lede {
+    font-family: var(--sans); font-size: clamp(1rem, 1.9vw, 1.3rem);
+    line-height: 1.7; color: var(--gray); max-width: 40ch; margin-top: 1.6rem;
+  }
+  .body-copy {
+    font-size: clamp(1.05rem, 1.9vw, 1.3rem); line-height: 1.75; color: #2c2b26;
+  }
+  .body-copy + .body-copy { margin-top: 1.2rem; }
+  .dropcap::first-letter {
+    font-size: 3.4em; float: left; line-height: .82;
+    padding-right: .12em; color: var(--rouge);
+  }
+  .rule-red { width: 64px; height: 1px; background: var(--rouge); }
+  .center .rule-red { margin-left: auto; margin-right: auto; }
+
+  /* ---------- statement ---------- */
+  .statement { text-align: center; max-width: 44ch; margin: 0 auto; }
+  .statement .rule-red { margin: 0 auto 2.4rem; }
+  .statement .rule-red:last-child { margin: 2.4rem auto 0; }
+  .statement p {
+    font-size: clamp(1.8rem, 3.8vw, 3.1rem); font-weight: 400;
+    line-height: 1.28; text-wrap: balance;
+  }
+  .statement p em { font-style: italic; color: var(--rouge); }
+
+  /* ---------- three pillars ---------- */
+  .pillars3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 2.6rem; }
+  @media (max-width: 860px) { .pillars3 { grid-template-columns: 1fr; gap: 1.8rem; } }
+  .pillars3 .rn {
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem); color: var(--rouge);
+    letter-spacing: .08em; margin-bottom: 1rem; border-bottom: 1px solid var(--line);
+    padding-bottom: .8rem;
+  }
+  .pillars3 h3 {
+    font-size: clamp(1.35rem, 2.4vw, 1.8rem); font-weight: 400;
+    margin-bottom: .8rem; text-wrap: balance;
+  }
+  .pillars3 p {
+    font-family: var(--sans); font-size: clamp(.95rem, 1.7vw, 1.1rem);
+    line-height: 1.7; color: var(--gray);
+  }
+
+  /* ---------- editorial split ---------- */
+  .cols { display: grid; grid-template-columns: 1.2fr .8fr; gap: 4rem; align-items: start; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; gap: 2rem; } }
+  .figure { border: 1px solid var(--ink); padding: .7rem; }
+  .figure .ph {
+    aspect-ratio: 4 / 5; background: var(--line); display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-size: .8rem; letter-spacing: .2em; color: var(--gray); text-transform: uppercase;
+  }
+  .figure figcaption {
+    font-family: var(--sans); font-size: .72rem; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--gray); margin-top: .7rem; text-align: center;
+  }
+
+  /* ---------- stat band ---------- */
+  .stat-band {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    margin-top: 2.6rem; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink);
+  }
+  @media (max-width: 860px) { .stat-band { grid-template-columns: 1fr; } }
+  .stat-band > div { padding: 2.2rem 2rem; text-align: center; }
+  .stat-band > div + div { border-left: 1px solid var(--line); }
+  @media (max-width: 860px) { .stat-band > div + div { border-left: none; border-top: 1px solid var(--line); } }
+  .stat-band b {
+    display: block; font-weight: 400;
+    font-size: clamp(2.8rem, 6vw, 4.8rem); line-height: 1; letter-spacing: -0.01em;
+  }
+  .stat-band b em { font-style: italic; color: var(--rouge); }
+  .stat-band span {
+    display: block; margin-top: .9rem;
+    font-family: var(--sans); font-size: .75rem; font-weight: 600;
+    letter-spacing: .3em; text-transform: uppercase; color: var(--gray);
+  }
+
+  /* ---------- quote ---------- */
+  blockquote.ed { text-align: center; max-width: 38ch; margin: 0 auto; }
+  blockquote.ed .rule-red { margin: 0 auto 2rem; }
+  blockquote.ed .rule-red:last-child { margin: 2rem auto 0; }
+  blockquote.ed p {
+    font-size: clamp(1.7rem, 3.6vw, 2.9rem); font-style: italic;
+    line-height: 1.3; text-wrap: balance;
+  }
+  blockquote.ed cite {
+    display: block; margin-top: 2rem; font-style: normal;
+    font-family: var(--sans); font-size: .78rem; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--gray);
+  }
+
+  /* ---------- process steps ---------- */
+  ol.steps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 2.6rem; }
+  @media (max-width: 860px) { ol.steps { grid-template-columns: 1fr; gap: 1.6rem; } }
+  ol.steps li { padding: 0 1.8rem; position: relative; }
+  ol.steps li:first-child { padding-left: 0; }
+  ol.steps li + li { border-left: 1px solid var(--line); }
+  @media (max-width: 860px) { ol.steps li { padding: 0; } ol.steps li + li { border-left: none; border-top: 1px solid var(--line); padding-top: 1.6rem; } }
+  ol.steps .n {
+    font-size: clamp(1.2rem, 2vw, 1.5rem); color: var(--rouge);
+    letter-spacing: .1em; margin-bottom: 1rem;
+  }
+  ol.steps h3 { font-size: clamp(1.2rem, 2.2vw, 1.6rem); font-weight: 400; margin-bottom: .7rem; }
+  ol.steps p { font-family: var(--sans); font-size: clamp(.92rem, 1.6vw, 1.05rem); line-height: 1.7; color: var(--gray); }
+
+  /* ---------- agenda ---------- */
+  ol.agenda { list-style: none; margin-top: 2.2rem; max-width: 680px; }
+  ol.agenda li {
+    display: flex; align-items: baseline; gap: 1.6rem;
+    padding: 1.15rem 0; border-bottom: 1px solid var(--line);
+    font-size: clamp(1.2rem, 2.3vw, 1.65rem); font-weight: 400;
+  }
+  ol.agenda li:last-child { border-bottom: none; }
+  ol.agenda .num {
+    font-family: var(--sans); font-size: clamp(.85rem, 1.5vw, 1rem);
+    font-weight: 700; color: var(--rouge); min-width: 2.4rem; letter-spacing: .08em;
+  }
+
+  /* ---------- video ---------- */
+  .video-wrap {
+    border: 1px solid var(--ink); padding: .7rem; background: var(--paper);
+    max-width: 860px; margin: 2.2rem auto 0;
+  }
+  .video-wrap video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+  .video-note {
+    margin-top: 1rem; text-align: center;
+    font-family: var(--sans); font-size: .8rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gray);
+  }
+
+  /* ---------- chrome ---------- */
+  #progress { position: fixed; top: 0; left: 0; height: 2px; z-index: 50; background: var(--rouge); width: 0; }
+  #counter {
+    position: fixed; bottom: 22px; right: 26px; z-index: 50;
+    font-family: var(--sans); font-size: .75rem; letter-spacing: .28em; color: var(--gray);
+  }
+  #fontctl {
+    position: fixed; top: 14px; right: 18px; z-index: 60;
+    display: flex; align-items: center; gap: 2px; padding: 4px 6px; border-radius: 999px;
+    background: rgba(246, 243, 236, .9); border: 1px solid var(--line);
+  }
+  #fontctl button {
+    font-family: var(--sans); font-size: .95rem; font-weight: 700;
+    width: 2rem; height: 2rem; border: none; border-radius: 50%;
+    background: transparent; color: var(--rouge); cursor: pointer;
+  }
+  #fontpct {
+    font-family: var(--sans); font-size: .75rem; color: var(--gray); font-weight: 700;
+    min-width: 3.2rem; text-align: center; cursor: pointer;
+  }
+  .navzone { position: fixed; top: 0; bottom: 0; width: 8vw; z-index: 40; cursor: pointer; }
+  #prevZone { left: 0; } #nextZone { right: 0; }
+
+  @media print {
+    #fontctl, #progress, #counter, .navzone { display: none !important; }
+    .slide {
+      position: relative; opacity: 1 !important; transform: none !important;
+      pointer-events: auto; inset: auto; page-break-after: always; min-height: 96vh;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="fontctl"><button id="fontdn" aria-label="Decrease font size">A−</button><span id="fontpct" title="Reset to 100%">100%</span><button id="fontup" aria-label="Increase font size">A+</button></div>
+<div id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide active">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 01</span><span>[Collection]</span></div>
+    <p class="kicker">[Season or series]</p>
+    <h1 class="display">[Your headline]<br><em>[accent word.]</em></h1>
+    <p class="lede">[One or two sentences that frame the talk — the promise, set in plain sans.]</p>
+    <div class="colophon"><span>[Your name or studio]</span><span>[Date]</span></div>
+  </section>
+
+  <!-- 2 · STATEMENT -->
+  <section class="slide">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 02</span><span>Statement</span></div>
+    <div class="statement">
+      <div class="rule-red"></div>
+      <p>[The single idea this talk turns on, set large — <em>the part they remember.</em>]</p>
+      <div class="rule-red"></div>
+    </div>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 02</span></div>
+  </section>
+
+  <!-- 3 · THREE PILLARS -->
+  <section class="slide top">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 03</span><span>Pillars</span></div>
+    <p class="kicker">[The framework]</p>
+    <h2 class="display">Three pillars, <em>one vision.</em></h2>
+    <div class="pillars3">
+      <div>
+        <div class="rn">I.</div>
+        <h3>[First pillar]</h3>
+        <p>[What it means and why it holds everything else up.]</p>
+      </div>
+      <div>
+        <div class="rn">II.</div>
+        <h3>[Second pillar]</h3>
+        <p>[What it means and why it holds everything else up.]</p>
+      </div>
+      <div>
+        <div class="rn">III.</div>
+        <h3>[Third pillar]</h3>
+        <p>[What it means and why it holds everything else up.]</p>
+      </div>
+    </div>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 03</span></div>
+  </section>
+
+  <!-- 4 · EDITORIAL SPLIT -->
+  <section class="slide top">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 04</span><span>Editorial</span></div>
+    <div class="cols">
+      <div>
+        <p class="kicker">[Chapter one]</p>
+        <h2 class="display">Cut with <em>intention.</em></h2>
+        <p class="body-copy dropcap">[Every spread begins with a single idea, set large and given room to breathe. The supporting text follows like a well-cut lining — invisible, structural, essential.]</p>
+        <p class="body-copy">[Two short paragraphs are plenty; the page does the rest of the talking.]</p>
+      </div>
+      <figure class="figure">
+        <div class="ph">[ Image ]</div>
+        <figcaption>Fig. 01 — [Caption]</figcaption>
+      </figure>
+    </div>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 04</span></div>
+  </section>
+
+  <!-- 5 · STAT BAND -->
+  <section class="slide top">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 05</span><span>Figures</span></div>
+    <p class="kicker">[By the numbers]</p>
+    <h2 class="display">The figures <em>speak.</em></h2>
+    <div class="stat-band">
+      <div><b>[48]<em>[%]</em></b><span>[What grew]</span></div>
+      <div><b>[3]<em>[×]</em></b><span>[What multiplied]</span></div>
+      <div><b>[12]</b><span>[What endured]</span></div>
+    </div>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 05</span></div>
+  </section>
+
+  <!-- 6 · QUOTE -->
+  <section class="slide">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 06</span><span>Voices</span></div>
+    <blockquote class="ed">
+      <div class="rule-red"></div>
+      <p>"[The quote — short enough to read at a glance, strong enough to remember.]"</p>
+      <cite>— [Name], [role or source]</cite>
+      <div class="rule-red"></div>
+    </blockquote>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 06</span></div>
+  </section>
+
+  <!-- 7 · PROCESS -->
+  <section class="slide top">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 07</span><span>Process</span></div>
+    <p class="kicker">[How it unfolds]</p>
+    <h2 class="display">From sketch <em>to stage.</em></h2>
+    <ol class="steps">
+      <li>
+        <div class="n">01</div>
+        <h3>[First step]</h3>
+        <p>[What happens here, in one line.]</p>
+      </li>
+      <li>
+        <div class="n">02</div>
+        <h3>[Second step]</h3>
+        <p>[What happens here, in one line.]</p>
+      </li>
+      <li>
+        <div class="n">03</div>
+        <h3>[Third step]</h3>
+        <p>[What happens here, in one line.]</p>
+      </li>
+      <li>
+        <div class="n">04</div>
+        <h3>[Fourth step]</h3>
+        <p>[What happens here, in one line.]</p>
+      </li>
+    </ol>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 07</span></div>
+  </section>
+
+  <!-- 8 · AGENDA -->
+  <section class="slide top">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 08</span><span>Agenda</span></div>
+    <p class="kicker">[The program]</p>
+    <h2 class="display">An evening in <em>five acts.</em></h2>
+    <ol class="agenda">
+      <li><span class="num">01</span>[First item]</li>
+      <li><span class="num">02</span>[Second item]</li>
+      <li><span class="num">03</span>[Third item]</li>
+      <li><span class="num">04</span>[Fourth item]</li>
+      <li><span class="num">05</span>[Fifth item]</li>
+    </ol>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 08</span></div>
+  </section>
+
+  <!-- 9 · VIDEO -->
+  <section class="slide top">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 09</span><span>Film</span></div>
+    <p class="kicker center">[Watch]</p>
+    <h2 class="display center">[See it <em>in motion.</em>]</h2>
+    <div class="video-wrap">
+      <video controls preload="metadata" poster="[POSTER-IMAGE].jpg">
+        <source src="[VIDEO-FILENAME].mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p class="video-note">[Place the .mp4 next to this HTML file for offline playback]</p>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 09</span></div>
+  </section>
+
+  <!-- 10 · CLOSING -->
+  <section class="slide">
+    <div class="masthead"><span>[Brand]</span><span class="no">N° 10</span><span>Fin</span></div>
+    <div class="center">
+      <p class="kicker">[The closing]</p>
+      <h1 class="display">[Thank you.]<br><em>[Encore.]</em></h1>
+      <div class="rule-red" style="margin-top:2.4rem"></div>
+      <p class="lede">[your-name@studio.com] · [your-site.com]</p>
+    </div>
+    <div class="colophon"><span>[Your name or studio]</span><span>N° 10</span></div>
+  </section>
+
+</div>
+<div class="navzone" id="prevZone"></div><div class="navzone" id="nextZone"></div>
+<div id="counter"></div>
+<script>
+/* ================= CONFIG ================= */
+const CONFIG = {
+  fontStorageKey: 'atelier-font-scale',   // unique per deck: persists A−/100%/A+ choice
+  minScale: 0.7,
+  maxScale: 2.0
+};
+/* =============== /CONFIG ================= */
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progress = document.getElementById('progress'), counter = document.getElementById('counter');
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    counter.textContent = 'N° ' + String(i + 1).padStart(2, '0');
+    slides[i].scrollTop = 0;
+    if (location.hash !== '#s' + (i + 1)) history.replaceState(null, '', '#s' + (i + 1));
+  }
+  // Font-size control (rem-based: everything scales together)
+  let fsScale = 1;
+  try {
+    const saved = parseFloat(localStorage.getItem(CONFIG.fontStorageKey));
+    if (saved >= CONFIG.minScale && saved <= CONFIG.maxScale) fsScale = saved;
+  } catch (e) {}
+  const fontPct = document.getElementById('fontpct');
+  function apply() {
+    fsScale = Math.min(CONFIG.maxScale, Math.max(CONFIG.minScale, Math.round(fsScale * 10) / 10));
+    document.documentElement.style.fontSize = (fsScale * 100) + '%';
+    fontPct.textContent = Math.round(fsScale * 100) + '%';
+    try { localStorage.setItem(CONFIG.fontStorageKey, fsScale); } catch (e) {}
+  }
+  document.getElementById('fontup').addEventListener('click', (e) => { e.stopPropagation(); fsScale += .1; apply(); });
+  document.getElementById('fontdn').addEventListener('click', (e) => { e.stopPropagation(); fsScale -= .1; apply(); });
+  fontPct.addEventListener('click', (e) => { e.stopPropagation(); fsScale = 1; apply(); });
+  // Navigation
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === '+' || e.key === '=') { fsScale += .1; apply(); }
+    else if (e.key === '-' || e.key === '_') { fsScale -= .1; apply(); }
+    else if (e.key === '0') { fsScale = 1; apply(); }
+    else if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); }
+  });
+  document.getElementById('nextZone').addEventListener('click', () => show(i + 1));
+  document.getElementById('prevZone').addEventListener('click', () => show(i - 1));
+  // Touch swipe
+  let tx = null;
+  document.addEventListener('touchstart', (e) => { tx = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 60) show(i + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+  apply();
+  const m = location.hash.match(/#s(\d+)/); show(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+</body>
+</html>
