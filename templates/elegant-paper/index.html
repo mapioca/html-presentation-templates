@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[TÍTULO] — Presentación</title>
+<!--
+  ============================================================================
+  TEMPLATE: elegant-paper
+  An elegant, premium HTML slide-deck template: warm paper background, serif
+  display titles, gold accents, activity tags, section timeline, and an
+  on-the-fly font-size control.
+
+  HOW TO USE
+  1. Copy this whole folder to start a new deck.
+  2. Edit CONFIG + LESSON_PLAN at the bottom of the <script>.
+  3. Replace the sample <section class="slide"> blocks with your content.
+     Keep the component classes: .eyebrow, .tag (+ leer/ver/analizar/meditar/
+     actividad/informar/compromiso), .timer, .card, blockquote, table.budget,
+     .columns, .video-wrap, .slide.divider + .ghost-num.
+  4. Tag every content slide with data-section="..." (an id from LESSON_PLAN)
+     and data-min="..." (minutes elapsed within that section) so the timeline
+     footer can track time. Cover/agenda slides omit data-section.
+  5. Everything is in this one file — no build step, no dependencies, works
+     from file:// and offline.
+  ============================================================================
+-->
+<style>
+  /* ---- Design tokens: tweak these to re-skin the whole deck ---- */
+  :root {
+    --paper: #fbfaf6;
+    --ink: #211d16;
+    --muted: #6e6455;
+    --line: #e7e0d2;
+    --gold: #a3854f;
+    --gold-deep: #8a6d3b;
+    --accent: #a3854f;
+    --leer: #2b4acb;
+    --ver: #7c3aed;
+    --analizar: #1e7a3c;
+    --meditar: #b45309;
+    --actividad: #c2410c;
+    --informar: #0e7490;
+    --compromiso: #166534;
+    --serif: Didot, "Bodoni MT", "Playfair Display", Georgia, "Times New Roman", serif;
+    --serif-text: Georgia, "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  #deck { position: fixed; inset: 0; }
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6vh 9vw 76px;
+    overflow-y: auto;
+    background:
+      radial-gradient(1200px 500px at 50% -10%, rgba(163,133,79,0.07), transparent 60%),
+      var(--paper);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    pointer-events: none;
+  }
+  .slide.active { opacity: 1; transform: none; pointer-events: auto; }
+  .slide.top { justify-content: flex-start; padding-top: 8vh; }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(2.4rem, 5.6vw, 4.6rem);
+    line-height: 1.08;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.4rem;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  h2 {
+    font-family: var(--serif-text);
+    font-weight: 600;
+    font-size: clamp(1.7rem, 3.6vw, 2.8rem);
+    line-height: 1.25;
+    margin-bottom: 1.1rem;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--serif-text);
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+    line-height: 1.3;
+    margin: 1.3rem 0 0.6rem;
+    text-wrap: balance;
+  }
+  p, li {
+    font-size: clamp(1.12rem, 2.1vw, 1.55rem);
+    line-height: 1.65;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  p + p { margin-top: 0.9rem; }
+  ul, ol { margin: 0.8rem 0 0.8rem 1.6rem; }
+  li + li { margin-top: 0.55rem; }
+  .small { font-size: clamp(0.95rem, 1.7vw, 1.2rem); color: var(--muted); }
+  .center { text-align: center; }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    color: var(--gold-deep);
+    font-weight: 600;
+    margin-bottom: 1.4rem;
+  }
+  /* fine gold ornament divider */
+  .ornament {
+    display: flex; align-items: center; gap: 14px;
+    margin: 1.6rem auto; max-width: 320px;
+  }
+  .ornament::before, .ornament::after {
+    content: ""; height: 1px; flex: 1;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .ornament::after { background: linear-gradient(90deg, var(--gold), transparent); }
+  .ornament span {
+    width: 8px; height: 8px; transform: rotate(45deg);
+    background: var(--gold); display: block;
+  }
+  .rule { display: none; }
+
+  .tag {
+    display: inline-block;
+    font-size: clamp(0.78rem, 1.5vw, 1rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0.4rem 1.2rem 0.35rem;
+    margin-bottom: 1.2rem;
+    background: rgba(255,255,255,0.6);
+  }
+  .tag.leer { color: var(--leer); }
+  .tag.ver { color: var(--ver); }
+  .tag.analizar { color: var(--analizar); }
+  .tag.meditar { color: var(--meditar); }
+  .tag.actividad { color: var(--actividad); }
+  .tag.informar { color: var(--informar); }
+  .tag.compromiso { color: var(--compromiso); }
+
+  /* embedded offline video */
+  .video-wrap {
+    max-width: 880px;
+    margin: 1.4rem auto;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(120, 96, 40, 0.18);
+    background: #000;
+  }
+  .video-wrap video { display: block; width: 100%; max-height: 62vh; }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.6rem 2rem;
+    margin: 1.1rem 0;
+    background: rgba(255,255,255,0.72);
+    box-shadow: 0 12px 32px -18px rgba(60, 48, 24, 0.25);
+    position: relative;
+  }
+  .card::before {
+    content: ""; position: absolute; top: -1px; left: 2rem; right: 2rem; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .card.leer::after, .card.ver::after, .card.analizar::after,
+  .card.meditar::after, .card.actividad::after,
+  .card.informar::after, .card.compromiso::after {
+    content: ""; position: absolute; left: 0; top: 1.2rem; bottom: 1.2rem; width: 3px;
+    border-radius: 3px;
+  }
+  .card.leer::after { background: var(--leer); }
+  .card.ver::after { background: var(--ver); }
+  .card.analizar::after { background: var(--analizar); }
+  .card.meditar::after { background: var(--meditar); }
+  .card.actividad::after { background: var(--actividad); }
+  .card.informar::after { background: var(--informar); }
+  .card.compromiso::after { background: var(--compromiso); }
+
+  blockquote {
+    font-family: var(--serif-text);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.7vw, 1.95rem);
+    line-height: 1.6;
+    margin: 1.6rem auto;
+    max-width: 44ch;
+    color: #2c271e;
+    text-align: center;
+    position: relative;
+    padding-top: 1.2rem;
+  }
+  blockquote::before {
+    content: "\201C";
+    position: absolute; top: -0.6rem; left: 50%; transform: translateX(-50%);
+    font-size: 3.2rem; color: var(--gold); font-style: normal;
+    font-family: var(--serif);
+  }
+  blockquote cite {
+    display: block;
+    font-style: normal;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 1rem;
+  }
+
+  /* section divider with ghost numeral */
+  .slide.divider { text-align: center; }
+  .ghost-num {
+    font-family: var(--serif);
+    font-size: clamp(6rem, 18vw, 13rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--gold);
+    opacity: 0.55;
+    margin-bottom: 0.4rem;
+  }
+
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media (max-width: 800px) { .columns { grid-template-columns: 1fr; } }
+
+  table.budget {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: clamp(1rem, 1.9vw, 1.35rem);
+  }
+  table.budget th, table.budget td {
+    border: 1px solid var(--line);
+    padding: 0.7rem 1rem;
+    text-align: left;
+  }
+  table.budget th { background: #f5f0e4; font-family: var(--serif-text); font-weight: 600; }
+
+  .timer {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold-deep);
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.35rem 1.1rem;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    margin-bottom: 1.1rem;
+    background: rgba(255,255,255,0.6);
+  }
+
+  /* lesson timeline (time budget per section) */
+  #timeline {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+    background: rgba(251,250,246,0.96);
+    border-top: 1px solid var(--line);
+    padding: 7px 16px 9px;
+    backdrop-filter: blur(4px);
+  }
+  #timeline .tlabel {
+    font-size: 0.72rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    margin-bottom: 4px; display: flex; justify-content: space-between;
+  }
+  #timeline .tlabel strong { color: var(--ink); font-weight: 600; }
+  #tbar { display: flex; gap: 3px; height: 26px; }
+  .tseg {
+    position: relative; border-radius: 3px; overflow: hidden;
+    background: #efe9d9; min-width: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tseg .fill {
+    position: absolute; inset: 0 auto 0 0; width: 0;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+  }
+  .tseg.done .fill { width: 100%; }
+  .tseg .tname {
+    position: relative; z-index: 1;
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em; color: #675d4c;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px;
+  }
+  .tseg.current { outline: 1px solid var(--gold-deep); outline-offset: -1px; background: #f6f1e3; }
+  .tseg.current .tname { color: var(--ink); }
+  .tseg .tmin { position: relative; z-index: 1; font-size: 0.64rem; color: #8a8171; margin-left: 4px; }
+  .slide { padding-bottom: 84px; }
+
+  /* chrome */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 2px; z-index: 50;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+    width: 0;
+  }
+  #counter {
+    position: fixed; bottom: 74px; right: 22px;
+    font-family: var(--serif);
+    font-size: 0.95rem; letter-spacing: 0.18em; color: var(--muted); z-index: 50;
+  }
+  #navhint {
+    position: fixed; bottom: 74px; left: 22px;
+    font-size: 0.78rem; letter-spacing: 0.06em; color: #a89a80; z-index: 50;
+  }
+  .navzone { position: fixed; top: 0; bottom: 0; width: 8vw; z-index: 40; cursor: pointer; }
+  #prevZone { left: 0; } #nextZone { right: 0; }
+
+  /* on-the-fly font size control — visible on every slide */
+  #fontctl {
+    position: fixed; top: 14px; right: 18px; z-index: 60;
+    display: flex; align-items: center; gap: 2px;
+    background: rgba(251,250,246,0.94);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 6px;
+    box-shadow: 0 8px 24px -14px rgba(60,48,24,0.35);
+    backdrop-filter: blur(4px);
+  }
+  #fontctl button {
+    font-family: var(--serif);
+    font-size: 1rem; font-weight: 600;
+    width: 2rem; height: 2rem; line-height: 1;
+    border: none; border-radius: 50%;
+    background: transparent; color: var(--gold-deep);
+    cursor: pointer;
+  }
+  #fontctl button:hover { background: #f1e9d6; }
+  #fontpct {
+    font-size: 0.8rem; color: var(--muted); font-weight: 600;
+    min-width: 3.2rem; text-align: center;
+    letter-spacing: 0.04em; cursor: pointer;
+  }
+  #fontpct:hover { color: var(--gold-deep); }
+
+  @media print {
+    body { overflow: visible; }
+    #deck { position: static; }
+    .slide { position: static; display: flex; page-break-after: always; min-height: 90vh; }
+    #progress, #counter, #navhint, #fontctl, .navzone { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="fontctl">
+  <button id="fontdn" title="Reducir el tamaño de la letra">A−</button><span id="fontpct" title="Tamaño actual — toque para restablecer al 100 %">100%</span><button id="fontup" title="Aumentar el tamaño de la letra">A+</button>
+</div>
+<div id="deck">
+
+  <!-- ============ COVER ============ -->
+  <section class="slide active">
+    <div class="center">
+      <p class="eyebrow">[Serie o curso]</p>
+      <div class="ornament"><span></span></div>
+      <h1>[Título de la<br>presentación]</h1>
+      <div class="ornament"><span></span></div>
+      <p class="small" style="margin-top:1.5rem; letter-spacing:0.06em">Use las flechas del teclado, la barra espaciadora o toque los bordes para avanzar</p>
+    </div>
+  </section>
+
+  <!-- ============ AGENDA ============ -->
+  <section class="slide">
+    <p class="eyebrow">Esta sesión</p>
+    <h1>Cómo trabajaremos hoy</h1>
+    <div class="ornament" style="margin-left:0"><span></span></div>
+    <ol>
+      <li><strong>[Sección 1]</strong> — Descripción breve <span class="small">(10 min)</span></li>
+      <li><strong>[Sección 2]</strong> — Descripción breve <span class="small">(30 min)</span></li>
+      <li><strong>[Sección 3]</strong> — Descripción breve <span class="small">(10 min)</span></li>
+    </ol>
+  </section>
+
+  <!-- ============ SECTION DIVIDER ============ -->
+  <section class="slide divider" data-section="apertura" data-min="0">
+    <div class="ghost-num">01</div>
+    <p class="eyebrow">Tiempo máximo · 10 minutos</p>
+    <h1>[Sección 1]</h1>
+    <div class="ornament"><span></span></div>
+    <p class="small" style="letter-spacing:0.14em; text-transform:uppercase">[Subtítulo de la sección]</p>
+  </section>
+
+  <!-- ============ CONTENT + CARD + TIMER ============ -->
+  <section class="slide top" data-section="apertura" data-min="2">
+    <span class="tag informar">Informar</span>
+    <div class="timer">5 minutos</div>
+    <h2>[Título del punto]</h2>
+    <p>[Párrafo de contenido. Las tarjetas de abajo usan las clases <strong>.card</strong> más el tipo de actividad para la franja de color lateral.]</p>
+    <div class="card analizar">
+      <span class="tag analizar">Analizar</span>
+      <p><strong>[Pregunta para el grupo]</strong></p>
+    </div>
+  </section>
+
+  <!-- ============ QUOTE ============ -->
+  <section class="slide top" data-section="contenido" data-min="5">
+    <span class="tag leer">Leer</span>
+    <h2>[Cita destacada]</h2>
+    <blockquote>
+      [Texto de la cita. Se centra automáticamente con una comilla dorada decorativa.]
+      <cite>[Autor — Fuente]</cite>
+    </blockquote>
+  </section>
+
+  <!-- ============ TABLE ============ -->
+  <section class="slide top" data-section="contenido" data-min="12">
+    <span class="tag leer">Leer</span>
+    <h2>[Tabla de ejemplo]</h2>
+    <table class="budget">
+      <tr><th>[Columna A]</th><th>[Columna B]</th><th>[Columna C]</th></tr>
+      <tr><td>[Dato]</td><td>[Dato]</td><td>[Dato]</td></tr>
+      <tr><td>[Dato]</td><td>[Dato]</td><td>[Dato]</td></tr>
+    </table>
+    <p class="small">[Nota al pie de la tabla.]</p>
+  </section>
+
+  <!-- ============ VIDEO ============ -->
+  <section class="slide top" data-section="contenido" data-min="20">
+    <span class="tag ver">Ver</span>
+    <h2>[Título del video]</h2>
+    <div class="video-wrap">
+      <!--
+        OFFLINE VIDEO: download the video file (e.g. with yt-dlp) and place the
+        .mp4 NEXT TO this HTML file, then set src to its filename. The player
+        then works with no internet connection.
+      -->
+      <video controls preload="metadata" src="mi-video.mp4"></video>
+    </div>
+    <p class="small">Duración: <strong>[0:00]</strong> · [Nota sobre el video.]</p>
+  </section>
+
+  <!-- ============ TWO COLUMNS ============ -->
+  <section class="slide top" data-section="contenido" data-min="25">
+    <span class="tag actividad">Actividad</span>
+    <h2>[Dos columnas]</h2>
+    <div class="columns">
+      <div class="card leer">
+        <span class="tag leer">Leer</span>
+        <p><strong>[Columna izquierda]</strong></p>
+        <p class="small">[Contenido de apoyo.]</p>
+      </div>
+      <div class="card compromiso">
+        <span class="tag compromiso">Compromiso</span>
+        <p><strong>[Columna derecha]</strong></p>
+        <p class="small">[Contenido de apoyo.]</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION DIVIDER 2 ============ -->
+  <section class="slide divider" data-section="cierre" data-min="0">
+    <div class="ghost-num">02</div>
+    <p class="eyebrow">Tiempo máximo · 10 minutos</p>
+    <h1>[Sección 3]</h1>
+    <div class="ornament"><span></span></div>
+    <p class="small" style="letter-spacing:0.14em; text-transform:uppercase">[Subtítulo de la sección]</p>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="slide top" data-section="cierre" data-min="3">
+    <div class="center">
+      <span class="tag meditar">Meditar</span>
+      <h2>[Pregunta de cierre]</h2>
+      <div class="ornament"><span></span></div>
+      <div class="card compromiso" style="text-align:left">
+        <span class="tag compromiso">Compromiso</span>
+        <p><strong>[Compromiso para la semana]</strong></p>
+        <p class="small">[Detalle del compromiso.]</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+<div id="timeline" aria-hidden="true">
+  <div class="tlabel"><span id="tpos"></span><span id="ttotal"></span></div>
+  <div id="tbar"></div>
+</div>
+<div class="navzone" id="prevZone" title="Anterior"></div>
+<div class="navzone" id="nextZone" title="Siguiente"></div>
+<div id="counter"></div>
+<div id="navhint"></div>
+
+<script>
+(function () {
+  /* ============ CONFIG: edit these for each new deck ============ */
+  const CONFIG = {
+    lessonName: 'Mi presentación',   // fallback label in the timeline header
+    navHint: '← → para navegar · F pantalla completa',
+    fontStorageKey: 'elegant-paper-fontscale', // unique per deck (localStorage)
+  };
+  /* ---- Time plan: minutes per section. Slides reference these via
+     data-section="<id>" and data-min="<minutes elapsed in section>". ---- */
+  const LESSON_PLAN = [
+    { id: 'apertura',  name: 'Apertura',  minutes: 10 },
+    { id: 'contenido', name: 'Contenido', minutes: 30 },
+    { id: 'cierre',    name: 'Cierre',    minutes: 10 },
+  ];
+  const TOTAL = LESSON_PLAN.reduce((a, s) => a + s.minutes, 0);
+
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const tbar = document.getElementById('tbar');
+  const tpos = document.getElementById('tpos');
+  const ttotal = document.getElementById('ttotal');
+  document.getElementById('navhint').innerHTML = CONFIG.navHint;
+  let i = 0;
+
+  /* build timeline segments once */
+  const segEls = LESSON_PLAN.map((s) => {
+    const d = document.createElement('div');
+    d.className = 'tseg';
+    d.style.flex = s.minutes + ' ' + s.minutes + ' 0';
+    d.innerHTML = '<div class="fill"></div><span class="tname">' + s.name +
+      '</span><span class="tmin">' + s.minutes + ' min</span>';
+    d.title = s.name + ' — ' + s.minutes + ' minutos';
+    tbar.appendChild(d);
+    return d;
+  });
+  ttotal.textContent = 'Total aprox.: ' + TOTAL + ' min';
+
+  function renderTimeline(slide) {
+    const secId = slide.getAttribute('data-section');
+    const minIn = parseFloat(slide.getAttribute('data-min') || '0');
+    const idx = LESSON_PLAN.findIndex((s) => s.id === secId);
+    let elapsed = 0;
+    segEls.forEach((el, k) => {
+      const fill = el.querySelector('.fill');
+      el.classList.remove('done', 'current');
+      fill.style.width = '0';
+      if (idx === -1) return;
+      if (k < idx) { el.classList.add('done'); elapsed += LESSON_PLAN[k].minutes; }
+      else if (k === idx) {
+        el.classList.add('current');
+        const frac = Math.max(0, Math.min(1, minIn / LESSON_PLAN[k].minutes));
+        fill.style.width = (frac * 100) + '%';
+        elapsed += minIn;
+      }
+    });
+    if (idx === -1) { tpos.textContent = CONFIG.lessonName; }
+    else {
+      const s = LESSON_PLAN[idx];
+      const remain = Math.max(0, Math.round(s.minutes - minIn));
+      tpos.innerHTML = '<strong>' + s.name + '</strong> &nbsp;·&nbsp; van ' +
+        Math.round(Math.min(minIn, s.minutes)) + ' de ' + s.minutes +
+        ' min (quedan ~' + remain + ') &nbsp;·&nbsp; transcurridos ' +
+        Math.round(elapsed) + ' de ' + TOTAL + ' min';
+    }
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    slides[i].scrollTop = 0;
+    renderTimeline(slides[i]);
+    if (location.hash !== '#s' + (i + 1)) history.replaceState(null, '', '#s' + (i + 1));
+  }
+  function next() { show(i + 1); }
+  function prev() { show(i - 1); }
+
+  /* ---- on-the-fly font size: all type is rem-based, so scaling the root scales everything proportionally ---- */
+  let fsScale = 1;
+  try { fsScale = parseFloat(localStorage.getItem(CONFIG.fontStorageKey)) || 1; } catch (_) {}
+  const FS_STEP = 0.1, FS_MIN = 0.7, FS_MAX = 2.0;
+  const fontPct = document.getElementById('fontpct');
+  function applyFontScale() {
+    fsScale = Math.min(FS_MAX, Math.max(FS_MIN, Math.round(fsScale * 10) / 10));
+    document.documentElement.style.fontSize = (fsScale * 100) + '%';
+    fontPct.textContent = Math.round(fsScale * 100) + '%';
+    try { localStorage.setItem(CONFIG.fontStorageKey, String(fsScale)); } catch (_) {}
+  }
+  function fontBigger() { fsScale += FS_STEP; applyFontScale(); }
+  function fontSmaller() { fsScale -= FS_STEP; applyFontScale(); }
+  document.getElementById('fontup').addEventListener('click', (e) => { e.stopPropagation(); fontBigger(); });
+  document.getElementById('fontdn').addEventListener('click', (e) => { e.stopPropagation(); fontSmaller(); });
+  fontPct.addEventListener('click', (e) => { e.stopPropagation(); fsScale = 1; applyFontScale(); });
+  applyFontScale();
+
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(() => {});
+    }
+    else if (e.key === '+' || e.key === '=') { fontBigger(); }
+    else if (e.key === '-' || e.key === '_') { fontSmaller(); }
+  });
+  document.getElementById('nextZone').addEventListener('click', next);
+  document.getElementById('prevZone').addEventListener('click', prev);
+
+  let tx = null;
+  document.addEventListener('touchstart', (e) => { tx = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx;
+    if (dx < -60) next(); else if (dx > 60) prev();
+    tx = null;
+  }, { passive: true });
+
+  const m = location.hash.match(/#s(\d+)/);
+  show(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+</body>
+</html>
