@@ -1,1 +1,224 @@
-{"description": "A library of reusable single-file HTML slide-deck templates. Each template is one self-contained .html file: no build step, no dependencies, works from file:// and offline.", "name": "html-presentation-templates", "templates": [{"description": "Warm paper background, Didone serif display titles with a sturdier Georgia for body headings, gold accents and ornaments. Built for facilitators: labeled activity tags, timed section dividers, a live lesson-timeline footer, offline video embeds, and an on-the-fly font-size control for room readability.", "id": "elegant-paper", "name": "Elegant Paper", "path": "templates/elegant-paper/index.html", "tags": ["elegant", "premium", "serif", "facilitator", "timeline", "offline-video", "font-control"], "thumbnails": ["templates/elegant-paper/thumbnails/cover.png", "templates/elegant-paper/thumbnails/mid.png", "templates/elegant-paper/thumbnails/later.png"]}, {"description": "Apple-inspired general presentation template with Liquid Glass: SF type stack, giant tight headlines, Apple blue, pill buttons, frosted refractive glass cards floating over solid color \u2014 zero gradients. Solid-black statement and closing slides, agenda, quote, stats, two-column with offline video slot, spec table, and the A\u2212/100%/A+ font control. No lesson timeline: built as a general Canva substitute.", "id": "keynote", "name": "Keynote", "path": "templates/keynote/index.html", "tags": ["apple", "minimal", "liquid-glass", "general", "font-control", "offline-video", "premium"], "thumbnails": ["templates/keynote/thumbnails/cover.png", "templates/keynote/thumbnails/mid.png", "templates/keynote/thumbnails/later.png"]}, {"id": "atelier", "name": "Atelier", "description": "Fashion-editorial general presentation template: ivory paper, ink black, rouge accents, Didone serif display titles, small-caps kickers, masthead bar with issue numbering on every slide, drop-cap editorial columns, stat band, quote, process, agenda, offline video slot, and the persisted A\u2212/100%/A+ font control. No gradients, no timeline.", "path": "templates/atelier/index.html", "tags": ["editorial", "fashion", "serif", "elegant", "general", "font-control", "offline-video", "premium"], "thumbnails": ["templates/atelier/thumbnails/cover.png", "templates/atelier/thumbnails/mid.png", "templates/atelier/thumbnails/later.png"]}, {"id": "deco", "name": "Deco", "description": "Gilded art-deco general presentation template: deep emerald and cream slides, solid gold ornament, double gold frame on every slide, sunburst ray texture, chevron dividers, roman numerals, Georgia serif headlines, stat band, quote, process, agenda, offline video slot, and the persisted A\u2212/100%/A+ font control. No gradients, no timeline.", "path": "templates/deco/index.html", "tags": ["art-deco", "gold", "luxury", "elegant", "general", "font-control", "offline-video", "premium"], "thumbnails": ["templates/deco/thumbnails/cover.png", "templates/deco/thumbnails/mid.png", "templates/deco/thumbnails/later.png"]}, {"id": "washi", "name": "Washi", "description": "Japanese-minimalist general presentation template: warm stone background, sumi ink, vermillion hanko seals, ens\u014d circle, vertical accent text, vast whitespace, light-weight sans headlines with Georgia italic quotes, stat band, process, agenda, offline video slot, and the persisted A\u2212/100%/A+ font control. No gradients, no timeline.", "path": "templates/washi/index.html", "tags": ["japanese", "minimalist", "zen", "elegant", "general", "font-control", "offline-video", "premium"], "thumbnails": ["templates/washi/thumbnails/cover.png", "templates/washi/thumbnails/mid.png", "templates/washi/thumbnails/later.png"]}]}
+{
+  "description": "A library of reusable single-file HTML slide-deck templates. Each template is one self-contained .html file: no build step, no dependencies, works from file:// and offline.",
+  "name": "html-presentation-templates",
+  "templates": [
+    {
+      "description": "Warm paper background, Didone serif display titles with a sturdier Georgia for body headings, gold accents and ornaments. Built for facilitators: labeled activity tags, timed section dividers, a live lesson-timeline footer, offline video embeds, and an on-the-fly font-size control for room readability.",
+      "id": "elegant-paper",
+      "name": "Elegant Paper",
+      "path": "templates/elegant-paper/index.html",
+      "tags": [
+        "elegant",
+        "premium",
+        "serif",
+        "facilitator",
+        "timeline",
+        "offline-video",
+        "font-control"
+      ],
+      "thumbnails": [
+        "templates/elegant-paper/thumbnails/cover.png",
+        "templates/elegant-paper/thumbnails/mid.png",
+        "templates/elegant-paper/thumbnails/later.png"
+      ]
+    },
+    {
+      "description": "Apple-inspired general presentation template with Liquid Glass: SF type stack, giant tight headlines, Apple blue, pill buttons, frosted refractive glass cards floating over solid color — zero gradients. Solid-black statement and closing slides, agenda, quote, stats, two-column with offline video slot, spec table, and the A−/100%/A+ font control. No lesson timeline: built as a general Canva substitute.",
+      "id": "keynote",
+      "name": "Keynote",
+      "path": "templates/keynote/index.html",
+      "tags": [
+        "apple",
+        "minimal",
+        "liquid-glass",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/keynote/thumbnails/cover.png",
+        "templates/keynote/thumbnails/mid.png",
+        "templates/keynote/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "atelier",
+      "name": "Atelier",
+      "description": "Fashion-editorial general presentation template: ivory paper, ink black, rouge accents, Didone serif display titles, small-caps kickers, masthead bar with issue numbering on every slide, drop-cap editorial columns, stat band, quote, process, agenda, offline video slot, and the persisted A−/100%/A+ font control. No gradients, no timeline.",
+      "path": "templates/atelier/index.html",
+      "tags": [
+        "editorial",
+        "fashion",
+        "serif",
+        "elegant",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/atelier/thumbnails/cover.png",
+        "templates/atelier/thumbnails/mid.png",
+        "templates/atelier/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "deco",
+      "name": "Deco",
+      "description": "Gilded art-deco general presentation template: deep emerald and cream slides, solid gold ornament, double gold frame on every slide, sunburst ray texture, chevron dividers, roman numerals, Georgia serif headlines, stat band, quote, process, agenda, offline video slot, and the persisted A−/100%/A+ font control. No gradients, no timeline.",
+      "path": "templates/deco/index.html",
+      "tags": [
+        "art-deco",
+        "gold",
+        "luxury",
+        "elegant",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/deco/thumbnails/cover.png",
+        "templates/deco/thumbnails/mid.png",
+        "templates/deco/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "washi",
+      "name": "Washi",
+      "description": "Japanese-minimalist general presentation template: warm stone background, sumi ink, vermillion hanko seals, ensō circle, vertical accent text, vast whitespace, light-weight sans headlines with Georgia italic quotes, stat band, process, agenda, offline video slot, and the persisted A−/100%/A+ font control. No gradients, no timeline.",
+      "path": "templates/washi/index.html",
+      "tags": [
+        "japanese",
+        "minimalist",
+        "zen",
+        "elegant",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/washi/thumbnails/cover.png",
+        "templates/washi/thumbnails/mid.png",
+        "templates/washi/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "ember",
+      "name": "Ember",
+      "description": "Bold creative-brief editorial presentation template: fiery solid vermilion, black ink and warm off-white paper; massive condensed uppercase grotesque headlines (system stacks only), tracked-out kickers, thick black rules, oversized type colliding with image frames, and editorial numbering. Mixes dark statement slides with light content slides. Cover, agenda, big statement, punch list, two-column, stat block, giant quote, CSS/SVG visual interlude, offline video slot, and closing — with the A−/100%/A+ font control. No gradients, no lesson timeline: built as a general Canva substitute.",
+      "path": "templates/ember/index.html",
+      "tags": [
+        "editorial",
+        "bold",
+        "creative",
+        "agency",
+        "vermilion",
+        "condensed-type",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/ember/thumbnails/cover.png",
+        "templates/ember/thumbnails/mid.png",
+        "templates/ember/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "monument",
+      "name": "Monument",
+      "description": "Stark black-and-gray minimalist presentation template in a Swiss/brutalist voice: pure black canvas, warm gray and off-white type, giant neutral-grotesque headlines at extreme scale, rigid grid, hairline rules, numbered sections 01–10, and vast negative space — the typography is the design. One inverted light slide for rhythm. Cover, agenda, big statement, text with bullets, two columns, stat band, quote, SVG visual interlude, offline video slot, and closing — with the A−/100%/A+ font control. No gradients, no lesson timeline: built as a general Canva substitute.",
+      "path": "templates/monument/index.html",
+      "tags": [
+        "minimal",
+        "brutalist",
+        "swiss",
+        "typographic",
+        "black",
+        "portfolio",
+        "elegant",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/monument/thumbnails/cover.png",
+        "templates/monument/thumbnails/mid.png",
+        "templates/monument/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "cacao",
+      "name": "Cacao",
+      "description": "Dark-luxury general presentation template: deep chocolate brown, espresso panels, warm cream type, one muted brass accent; refined Georgia serif headlines with brass italic accents, clean sans body, thin brass hairlines, numbered chapters, arch and rectangular image frames, and a pure-SVG visual-moment slide. Cover, agenda, statement, text with bullets, two-column with arch frame, stat row, quote, SVG art interlude, offline video slot, and closing — with the A−/100%/A+ font control. No gradients, no lesson timeline: built as a general Canva substitute.",
+      "path": "templates/cacao/index.html",
+      "tags": [
+        "dark",
+        "luxury",
+        "elegant",
+        "interior",
+        "brass",
+        "serif",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/cacao/thumbnails/cover.png",
+        "templates/cacao/thumbnails/mid.png",
+        "templates/cacao/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "groove",
+      "name": "Groove",
+      "description": "70s groovy retro general presentation template: cream paper, burnt orange, mustard and avocado over chocolate ink; wavy SVG stripe bands, rounded blob cards, mustard sunburst accents, a vinyl-record SVG visual moment, and big rounded display type from the system rounded stack (fully offline). Cover, agenda, big statement, three blob cards, two-column spotlight, stat discs, quote card, SVG visual moment, offline video slot, and closing — with the A−/100%/A+ font control. No gradients, no lesson timeline: built as a general Canva substitute.",
+      "path": "templates/groove/index.html",
+      "tags": [
+        "retro",
+        "70s",
+        "playful",
+        "groovy",
+        "warm",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/groove/thumbnails/cover.png",
+        "templates/groove/thumbnails/mid.png",
+        "templates/groove/thumbnails/later.png"
+      ]
+    },
+    {
+      "id": "blush",
+      "name": "Blush",
+      "description": "Delicate pink proposal-style general presentation template: soft blush pink and warm white with deep burgundy/wine text, Georgia serif headlines, wide-tracked uppercase kickers, a whisper of script accents, thin wine rules, soft arch frames and generous whitespace. Cover, agenda, big statement, text with diamond bullets, two-column comparison, stat band, quote, arched SVG botanical interlude (fully offline), offline video slot, and closing — with the A−/100%/A+ font control. No gradients, no lesson timeline: built as a general Canva substitute.",
+      "path": "templates/blush/index.html",
+      "tags": [
+        "pink",
+        "elegant",
+        "proposal",
+        "feminine",
+        "romantic",
+        "minimal",
+        "general",
+        "font-control",
+        "offline-video",
+        "premium"
+      ],
+      "thumbnails": [
+        "templates/blush/thumbnails/cover.png",
+        "templates/blush/thumbnails/mid.png",
+        "templates/blush/thumbnails/later.png"
+      ]
+    }
+  ]
+}

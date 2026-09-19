@@ -61,6 +61,16 @@ self-contained: no build step, no npm, no CDN dependencies. A deck opens from
   `.tri`+`.rn` `blockquote.dq` `.video-wrap` `.slide.dark` `.slide.light`
 - **washi** (Japanese minimal): `.enso` `.hanko` `.vtext` `h1.zen`/`h2.zen`+`b` `.rule-red`
   `.principles`+`.n` `blockquote.zq` `.foot` `.video-wrap`
+- **ember** (bold editorial): `.masthead` `.kick` `.hero` `.bigword` `.bang` `.agenda`+`.n`
+  `.duo` `.stat` `.art`+`.disc` `.video-frame` `.foot`
+- **monument** (Swiss brutalist): `.giant` `.kicker` `.agenda`+`.num` `.cols` `.stat-band`+`.stat`
+  `.mq` (`blockquote`-style) `.bars` `.video-frame` `.foot`
+- **cacao** (dark luxury): `.chapter` `.kicker` `.rule-brass` `.chapters` `.split`+`.arch-frame`
+  `.stat-row`+`.stat` `.cq` (quote) `.art` `.video-frame` `.foot`
+- **groove** (70s retro): `.display` `.burst` `.groove-agenda` `.cards3` `.cols` `.pills`+`.pill`
+  `.gq` (quote) `.nblob` `.stage` `.video-frame` `.foot`
+- **blush** (pink proposal): `.kicker` `.script` `.arch-frame` `.agenda` `.twocol` `.stat-band`+`.stat`
+  `.diamond` `.bq` (quote) `.rule-wine` `.video-frame` `.foot`
 
 ## Conventions
 

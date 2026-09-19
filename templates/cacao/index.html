@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  CACAO — dark-luxury presentation template
+  ============================================================
+  Visual system: deep chocolate brown, espresso panels, warm cream
+  type, one muted brass accent; refined serif headlines (Georgia),
+  clean sans body, thin brass hairlines, generous whitespace,
+  numbered chapters, arch + rectangular image frames, quiet luxury.
+  Moody, elegant, solid colors only — zero gradients anywhere.
+
+  HOW TO USE:
+  1. Copy this folder to a new working folder (don't edit in place).
+  2. Set the CONFIG values in the <script> block at the bottom.
+  3. Replace the [BRACKETED] sample content with your own.
+  4. Delete slides you don't need; keep one of each component you use
+     as a reference while building.
+
+  COMPONENTS (see sample slides below):
+    Slide types : .slide (cocoa) · .slide.center (vertically centered)
+    Type        : .kicker (letterspaced small caps) · h1.cacao / h2.cacao
+                  (Georgia serif, <em> for brass italic accents)
+                  .lede · .body-copy · .chapter (large ghost numeral)
+    Cacao marks : .rule-brass (thin brass rule) · .foot (hairline footer
+                  with slide counter) · .arch-frame / .rect-frame
+                  (CSS image frames) · .vlabel (vertical edge label)
+    Layouts     : ol.chapters (numbered agenda rows) · ul.cacao-list
+                  (brass-diamond bullets) · .split (2 cols + framed figure)
+                  .stat-row (large serif numerals, hairline dividers)
+    Content     : blockquote.cq (Georgia italic quote) · .video-frame
+                  (offline <video> slot) · .art (pure SVG visual moment)
+    Chrome      : #fontctl (A−/100%/A+) · #progress · .navzone · .foot
+
+  NAVIGATION: → / ← / Space / PageUp / PageDown · F = fullscreen ·
+  click screen edges · touch swipe · deep-link with #sN
+  FONT SIZE: A− / 100% / A+ scales the root font size (70%–200%); all
+  type is rem-based so everything scales together. Persisted per deck.
+-->
+<title>[Deck title] — Cacao template</title>
+<style>
+  :root {
+    --cocoa: #241611;
+    --espresso: #2e1d14;
+    --cream: #f4ebdd;
+    --brass: #b08d57;
+    --taupe: #b3a48d;
+    --hairline: #4d382a;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: var(--sans); background: var(--cocoa); color: var(--cream); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  #deck { position: fixed; inset: 0; }
+
+  /* ---------- slides ---------- */
+  .slide { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center;
+    padding: 8vh 10vw; overflow: hidden; background: var(--cocoa);
+    opacity: 0; transition: opacity .6s ease; pointer-events: none; }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide.top { justify-content: flex-start; padding-top: 11vh; }
+  .content { position: relative; z-index: 2; }
+  .center { text-align: center; }
+  .center .lede, .center blockquote.cq { margin-left: auto; margin-right: auto; }
+
+  /* ---------- type ---------- */
+  .kicker { font-size: .78rem; letter-spacing: .42em; text-transform: uppercase; color: var(--brass); margin-bottom: 1.6rem; text-indent: .1em; }
+  h1.cacao { font-family: var(--serif); font-weight: 400; font-size: clamp(2.8rem, 7vw, 5.8rem);
+    line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; max-width: 16ch; color: var(--cream); }
+  h1.cacao em, h2.cacao em { font-style: italic; color: var(--brass); }
+  h2.cacao { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 4.2vw, 3.2rem);
+    line-height: 1.2; text-wrap: balance; margin-bottom: 1.4rem; max-width: 22ch; color: var(--cream); }
+  .lede { font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 2; color: var(--taupe); max-width: 42ch; margin-top: 1.8rem; font-weight: 300; }
+  .body-copy { font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 2; color: var(--cream); max-width: 46ch; font-weight: 300; opacity: .92; }
+  .body-copy + .body-copy { margin-top: 1.4rem; }
+  .small { font-size: clamp(.82rem, 1.4vw, .98rem); line-height: 1.8; color: var(--taupe); font-weight: 300; }
+  .chapter { font-family: var(--serif); font-size: clamp(.95rem, 1.6vw, 1.15rem); letter-spacing: .34em;
+    text-transform: uppercase; color: var(--brass); margin-bottom: 1.2rem; }
+
+  /* ---------- cacao marks ---------- */
+  .rule-brass { width: 56px; height: 2px; background: var(--brass); margin: 2rem 0; }
+  .center .rule-brass { margin-left: auto; margin-right: auto; }
+  .foot { position: absolute; bottom: 6vh; left: 10vw; right: 10vw;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--hairline); padding-top: 1.2rem;
+    font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--taupe); z-index: 2; }
+  .foot .pg { color: var(--brass); }
+  .vlabel { position: absolute; right: 4.5vw; top: 50%; transform: translateY(-50%);
+    writing-mode: vertical-rl; font-size: .72rem; letter-spacing: .5em;
+    text-transform: uppercase; color: var(--taupe); opacity: .7; z-index: 1; }
+
+  /* ---------- frames ---------- */
+  .arch-frame { border: 1px solid var(--brass); border-radius: 999px 999px 6px 6px; padding: .9rem; background: var(--espresso); }
+  .rect-frame { border: 1px solid var(--brass); padding: .9rem; background: var(--espresso); }
+  .arch-frame .ph, .rect-frame .ph { background: var(--cocoa); display: flex; align-items: center; justify-content: center;
+    font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; color: var(--taupe); text-indent: .28em; }
+  .arch-frame .ph { aspect-ratio: 3 / 4; border-radius: 999px 999px 3px 3px; }
+  .rect-frame .ph { aspect-ratio: 4 / 3; }
+  .arch-frame figcaption, .rect-frame figcaption { font-size: .7rem; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--taupe); margin-top: .9rem; text-align: center; }
+
+  /* ---------- agenda / chapters ---------- */
+  ol.chapters { list-style: none; margin-top: 2.6rem; max-width: 720px; }
+  ol.chapters li { display: flex; align-items: baseline; gap: 2.2rem; padding: 1.35rem 0; border-bottom: 1px solid var(--hairline);
+    font-family: var(--serif); font-size: clamp(1.15rem, 2.1vw, 1.55rem); color: var(--cream); }
+  ol.chapters li:first-child { border-top: 1px solid var(--hairline); }
+  ol.chapters .num { font-family: var(--sans); font-size: .82rem; font-weight: 400; letter-spacing: .3em; color: var(--brass); min-width: 2.6rem; }
+  ol.chapters .desc { margin-left: auto; font-family: var(--sans); font-size: .85rem; color: var(--taupe); letter-spacing: .08em; }
+
+  /* ---------- bullets ---------- */
+  ul.cacao-list { list-style: none; margin-top: 2rem; max-width: 640px; }
+  ul.cacao-list li { position: relative; padding: .85rem 0 .85rem 2.2rem;
+    font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.7; color: var(--cream); font-weight: 300;
+    border-bottom: 1px solid var(--hairline); }
+  ul.cacao-list li:first-child { border-top: 1px solid var(--hairline); }
+  ul.cacao-list li::before { content: ""; position: absolute; left: .4rem; top: 1.55rem;
+    width: 8px; height: 8px; background: var(--brass); transform: rotate(45deg); }
+
+  /* ---------- split (2 columns + framed figure) ---------- */
+  .split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 4rem; align-items: start; margin-top: 1.6rem; max-width: 1020px; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 2rem; } }
+  .split .arch-frame { width: 100%; max-width: 300px; justify-self: center; }
+  .arch-frame .ph { aspect-ratio: 3 / 4; max-height: 40vh; }
+  .split h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.2rem, 2.2vw, 1.6rem); margin-bottom: .8rem; color: var(--cream); }
+
+  /* ---------- stat row ---------- */
+  .stat-row { display: flex; gap: 4.5rem; margin-top: 3rem; flex-wrap: wrap; }
+  @media (max-width: 860px) { .stat-row { gap: 2.4rem; } }
+  .stat-row .stat + .stat { border-left: 1px solid var(--hairline); padding-left: 4.5rem; }
+  @media (max-width: 860px) { .stat-row .stat + .stat { border-left: none; padding-left: 0; } }
+  .stat-row .stat b { display: block; font-family: var(--serif); font-weight: 400;
+    font-size: clamp(3rem, 6vw, 5rem); letter-spacing: -0.02em; line-height: 1; margin-bottom: .9rem; color: var(--brass); }
+  .stat-row .stat span { font-size: .76rem; letter-spacing: .3em; text-transform: uppercase; color: var(--taupe); }
+
+  /* ---------- quote ---------- */
+  blockquote.cq { max-width: 38ch; }
+  blockquote.cq p { font-family: var(--serif); font-size: clamp(1.5rem, 3.2vw, 2.5rem); font-style: italic; line-height: 1.5; text-wrap: balance; color: var(--cream); }
+  blockquote.cq cite { display: block; margin-top: 1.8rem; font-style: normal; font-family: var(--sans);
+    font-size: .78rem; letter-spacing: .4em; text-transform: uppercase; color: var(--brass); text-indent: .4em; }
+
+  /* ---------- visual moment (pure SVG art) ---------- */
+  .art { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; }
+  .art svg { width: min(72vh, 86vw); height: auto; transform: translateY(-3vh); }
+  .art-caption { position: absolute; bottom: 12vh; left: 10vw; right: 10vw; z-index: 2;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: .72rem; letter-spacing: .3em; text-transform: uppercase; color: var(--taupe); }
+
+  /* ---------- video ---------- */
+  .video-frame { border: 1px solid var(--brass); padding: .9rem; background: var(--espresso); max-width: 760px; margin-top: 1.8rem; }
+  .video-frame video { display: block; width: 100%; aspect-ratio: 16 / 9; max-height: 34vh; background: #000; }
+  .video-note { margin-top: 1rem; }
+
+  /* ---------- chrome ---------- */
+  #progress { position: fixed; top: 0; left: 0; height: 2px; z-index: 50; background: var(--brass); width: 0; }
+  #fontctl { position: fixed; top: 14px; right: 18px; z-index: 60; display: flex; align-items: center; gap: 2px;
+    background: rgba(36,22,17,.94); border: 1px solid var(--hairline); border-radius: 999px; padding: 4px 6px; }
+  #fontctl button { font-family: var(--sans); font-size: .95rem; font-weight: 700; width: 2rem; height: 2rem;
+    border: none; border-radius: 50%; background: transparent; color: var(--brass); cursor: pointer; }
+  #fontctl button:hover { background: rgba(176,141,87,.14); }
+  #fontpct { font-family: var(--sans); font-size: .75rem; color: var(--taupe); font-weight: 700; min-width: 3.2rem; text-align: center; cursor: pointer; }
+  .navzone { position: fixed; top: 0; bottom: 0; width: 8vw; z-index: 40; cursor: pointer; }
+  #prevZone { left: 0; } #nextZone { right: 0; }
+
+  @media print {
+    #fontctl, #progress, .navzone { display: none !important; }
+    .slide { position: relative; opacity: 1 !important; transform: none !important; pointer-events: auto; inset: auto; page-break-after: always; min-height: 96vh; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="fontctl"><button id="fontdn" aria-label="Decrease font size">A−</button><span id="fontpct" title="Reset to 100%">100%</span><button id="fontup" aria-label="Increase font size">A+</button></div>
+<div id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide active">
+    <div class="vlabel">[No. 01 — The Collection]</div>
+    <div class="content center">
+      <p class="chapter">Chapter I</p>
+      <p class="kicker">[Kicker — a quiet introduction]</p>
+      <h1 class="cacao" style="margin-left:auto;margin-right:auto">[The Art of] <em>[Cacao]</em></h1>
+      <div class="rule-brass"></div>
+      <p class="lede" style="margin-left:auto;margin-right:auto">[One or two elegant sentences that frame the talk — the promise, stated with restraint.]</p>
+    </div>
+    <div class="foot"><span>[Cover]</span><span class="pg">01 / 10</span></div>
+  </section>
+
+  <!-- 2 · AGENDA -->
+  <section class="slide top">
+    <div class="vlabel">[The Order of Things]</div>
+    <div class="content">
+      <p class="chapter">Chapter II</p>
+      <p class="kicker">[Agenda]</p>
+      <h2 class="cacao">[What we will] <em>[cover.]</em></h2>
+      <ol class="chapters">
+        <li><span class="num">01</span>[First chapter]<span class="desc">[10 min]</span></li>
+        <li><span class="num">02</span>[Second chapter]<span class="desc">[15 min]</span></li>
+        <li><span class="num">03</span>[Third chapter]<span class="desc">[15 min]</span></li>
+        <li><span class="num">04</span>[Fourth chapter]<span class="desc">[10 min]</span></li>
+      </ol>
+    </div>
+    <div class="foot"><span>[Agenda]</span><span class="pg">02 / 10</span></div>
+  </section>
+
+  <!-- 3 · STATEMENT -->
+  <section class="slide">
+    <div class="vlabel">[The Single Idea]</div>
+    <div class="content center">
+      <div class="rule-brass"></div>
+      <h2 class="cacao" style="max-width:30ch;margin-left:auto;margin-right:auto;font-size:clamp(2rem,4.6vw,3.6rem)">[One clear sentence, set large and given room to breathe.] <em>[This is the line they will remember.]</em></h2>
+      <div class="rule-brass"></div>
+    </div>
+    <div class="foot"><span>[Statement]</span><span class="pg">03 / 10</span></div>
+  </section>
+
+  <!-- 4 · TEXT + BULLETS -->
+  <section class="slide top">
+    <div class="vlabel">[In Detail]</div>
+    <div class="content">
+      <p class="chapter">Chapter III</p>
+      <p class="kicker">[Key points]</p>
+      <h2 class="cacao">[The essentials,] <em>[distilled.]</em></h2>
+      <ul class="cacao-list">
+        <li>[First point — a single considered sentence.]</li>
+        <li>[Second point — a single considered sentence.]</li>
+        <li>[Third point — a single considered sentence.]</li>
+        <li>[Fourth point — a single considered sentence.]</li>
+      </ul>
+    </div>
+    <div class="foot"><span>[Key points]</span><span class="pg">04 / 10</span></div>
+  </section>
+
+  <!-- 5 · TWO COLUMN -->
+  <section class="slide top">
+    <div class="vlabel">[Look Closely]</div>
+    <div class="content">
+      <p class="chapter">Chapter IV</p>
+      <p class="kicker">[In focus]</p>
+      <h2 class="cacao">[The subject,] <em>[up close.]</em></h2>
+      <div class="split">
+        <div>
+          <h3>[A considered heading]</h3>
+          <p class="body-copy">[A short paragraph introducing the image. Two or three sentences are plenty — the page does the rest of the talking.]</p>
+          <p class="body-copy">[A second thought, if the first needs company.]</p>
+        </div>
+        <figure class="arch-frame">
+          <div class="ph">[ Image ]</div>
+          <figcaption>[Fig. 01 — caption]</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="foot"><span>[In focus]</span><span class="pg">05 / 10</span></div>
+  </section>
+
+  <!-- 6 · STATS -->
+  <section class="slide">
+    <div class="vlabel">[By the Numbers]</div>
+    <div class="content">
+      <p class="chapter">Chapter V</p>
+      <p class="kicker">[Evidence]</p>
+      <h2 class="cacao">[The numbers,] <em>[quietly stated.]</em></h2>
+      <div class="stat-row">
+        <div class="stat"><b>[128]</b><span>[What was counted]</span></div>
+        <div class="stat"><b>[94%]</b><span>[What held true]</span></div>
+        <div class="stat"><b>[3×]</b><span>[What multiplied]</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>[Evidence]</span><span class="pg">06 / 10</span></div>
+  </section>
+
+  <!-- 7 · QUOTE -->
+  <section class="slide">
+    <div class="vlabel">[Voices]</div>
+    <div class="content center">
+      <div class="rule-brass"></div>
+      <blockquote class="cq">
+        <p>"[The quote — short enough to read at a glance, strong enough to remember.]"</p>
+        <cite>— [Name], [source]</cite>
+      </blockquote>
+      <div class="rule-brass"></div>
+    </div>
+    <div class="foot"><span>[Voices]</span><span class="pg">07 / 10</span></div>
+  </section>
+
+  <!-- 8 · VISUAL MOMENT (pure SVG, offline) -->
+  <section class="slide">
+    <div class="art" aria-hidden="true">
+      <svg viewBox="0 0 600 760" fill="none">
+        <!-- nested arches -->
+        <path d="M 90 700 L 90 340 A 210 210 0 0 1 510 340 L 510 700" stroke="#b08d57" stroke-width="1.5"/>
+        <path d="M 130 700 L 130 360 A 170 170 0 0 1 470 360 L 470 700" stroke="#b08d57" stroke-width="1" opacity=".65"/>
+        <path d="M 170 700 L 170 380 A 130 130 0 0 1 430 380 L 430 700" stroke="#b08d57" stroke-width="1" opacity=".4"/>
+        <!-- brass disc -->
+        <circle cx="300" cy="250" r="58" fill="#b08d57"/>
+        <!-- small moon -->
+        <circle cx="300" cy="250" r="58" fill="none" stroke="#241611" stroke-width="1.5" opacity=".35"/>
+        <!-- ground rules -->
+        <line x1="60" y1="700" x2="540" y2="700" stroke="#b08d57" stroke-width="1.5"/>
+        <line x1="110" y1="716" x2="490" y2="716" stroke="#b08d57" stroke-width="1" opacity=".5"/>
+        <!-- scattered stars -->
+        <circle cx="150" cy="140" r="2.5" fill="#f4ebdd" opacity=".8"/>
+        <circle cx="452" cy="120" r="2" fill="#f4ebdd" opacity=".6"/>
+        <circle cx="492" cy="230" r="2.5" fill="#f4ebdd" opacity=".8"/>
+        <circle cx="108" cy="250" r="2" fill="#f4ebdd" opacity=".6"/>
+        <circle cx="400" cy="80" r="2" fill="#f4ebdd" opacity=".5"/>
+        <circle cx="200" cy="70" r="2.5" fill="#f4ebdd" opacity=".7"/>
+        <!-- diamond accents -->
+        <rect x="296" y="636" width="8" height="8" transform="rotate(45 300 640)" fill="#b08d57"/>
+        <rect x="96" y="696" width="8" height="8" transform="rotate(45 100 700)" fill="#b08d57" opacity=".6"/>
+        <rect x="496" y="696" width="8" height="8" transform="rotate(45 500 700)" fill="#b08d57" opacity=".6"/>
+      </svg>
+    </div>
+    <div class="art-caption"><span>[Fig. 02 — Night over the arches]</span><span>[Visual moment]</span></div>
+    <div class="foot"><span>[Interlude]</span><span class="pg">08 / 10</span></div>
+  </section>
+
+  <!-- 9 · VIDEO -->
+  <section class="slide top">
+    <div class="vlabel">[Watch]</div>
+    <div class="content">
+      <p class="chapter">Chapter VI</p>
+      <p class="kicker">[Film]</p>
+      <h2 class="cacao">[Watch it] <em>[unfold.]</em></h2>
+      <p class="lede" style="margin-top:1rem">[Two quiet sentences setting up the film — what to watch for.]</p>
+      <div class="video-frame">
+        <video controls preload="metadata" poster="[POSTER-IMAGE]">
+          <source src="[VIDEO-FILENAME].mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <p class="small video-note">[Place the .mp4 file next to this HTML file for offline playback.]</p>
+    </div>
+    <div class="foot"><span>[Film]</span><span class="pg">09 / 10</span></div>
+  </section>
+
+  <!-- 10 · CLOSING -->
+  <section class="slide">
+    <div class="vlabel">[Until Next Time]</div>
+    <div class="content center">
+      <p class="chapter">Fin</p>
+      <p class="kicker">[Closing]</p>
+      <h1 class="cacao" style="margin-left:auto;margin-right:auto">[Thank you.] <em>[Begin.]</em></h1>
+      <div class="rule-brass"></div>
+      <p class="lede" style="margin-left:auto;margin-right:auto">[Your name] · [your-site.com] · [hello@your-site.com]</p>
+    </div>
+    <div class="foot"><span>[Closing]</span><span class="pg">10 / 10</span></div>
+  </section>
+
+</div>
+<div class="navzone" id="prevZone"></div><div class="navzone" id="nextZone"></div>
+<script>
+/* ================= CONFIG ================= */
+const CONFIG = {
+  fontStorageKey: 'cacao-font-scale',   // unique per deck: persists A−/100%/A+ choice
+  minScale: 0.7,
+  maxScale: 2.0
+};
+/* =============== /CONFIG ================= */
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progress = document.getElementById('progress');
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    slides[i].scrollTop = 0;
+    if (location.hash !== '#s' + (i + 1)) history.replaceState(null, '', '#s' + (i + 1));
+  }
+  // Font-size control (rem-based: everything scales together)
+  let fsScale = 1;
+  try {
+    const saved = parseFloat(localStorage.getItem(CONFIG.fontStorageKey));
+    if (saved >= CONFIG.minScale && saved <= CONFIG.maxScale) fsScale = saved;
+  } catch (e) {}
+  const fontPct = document.getElementById('fontpct');
+  function apply() {
+    fsScale = Math.min(CONFIG.maxScale, Math.max(CONFIG.minScale, Math.round(fsScale * 10) / 10));
+    document.documentElement.style.fontSize = (fsScale * 100) + '%';
+    fontPct.textContent = Math.round(fsScale * 100) + '%';
+    try { localStorage.setItem(CONFIG.fontStorageKey, fsScale); } catch (e) {}
+  }
+  document.getElementById('fontup').addEventListener('click', (e) => { e.stopPropagation(); fsScale += .1; apply(); });
+  document.getElementById('fontdn').addEventListener('click', (e) => { e.stopPropagation(); fsScale -= .1; apply(); });
+  fontPct.addEventListener('click', (e) => { e.stopPropagation(); fsScale = 1; apply(); });
+  // Navigation
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === '+' || e.key === '=') { fsScale += .1; apply(); }
+    else if (e.key === '-' || e.key === '_') { fsScale -= .1; apply(); }
+    else if (e.key === '0') { fsScale = 1; apply(); }
+    else if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); }
+  });
+  document.getElementById('nextZone').addEventListener('click', () => show(i + 1));
+  document.getElementById('prevZone').addEventListener('click', () => show(i - 1));
+  // Touch swipe
+  let tx = null;
+  document.addEventListener('touchstart', (e) => { tx = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 60) show(i + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+  apply();
+  const m = location.hash.match(/#s(\d+)/); show(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+</body>
+</html>
